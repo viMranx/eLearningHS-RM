@@ -23,21 +23,3 @@ end
 
 ## Milestones
 ![Milestones](/Planung/Jira/milestones.jpg "Milestones")
-
-## Members
-* Adrian
-* Aischa
-* Dominik
-* Mehindi
-* Samet
-* Leon
-* Yassine
-* Marvyn
-***
-## Webseiten
-Jira: https://learn-azur.swift-jira.net/secure/RapidBoard.jspa?rapidView=1&projectKey=TEAM&view=detail&selectedIssue=TEAM-4
-Discord: https://discord.gg/G3VrWkZD 
-
-## Architektur
-![Architektur](/Planung/Jira/architektur.jpg "Architektur")
-

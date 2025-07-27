@@ -1,0 +1,473 @@
+<%- include('partials/header'); %>
+
+<div id="sidebar">
+    <%- include('partials/sidebar'); %>
+</div>
+<link href="../public/css/suchergebnisse.css" rel="stylesheet" type="text/css" />
+<%#function onlyUnique(value, index, self) { return self.indexOf(value) === index;}%>
+    <div id="content">
+        <h3 class="ueberschrift">
+            Suchergebnisse für&nbsp;<span id="suchWerte"></span>
+        </h3><br>
+        <div class="accordion" id="accordionExample">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingOne">
+                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+                        aria-expanded="true" aria-controls="collapseOne">
+                        Themen (<%=suchenQryThema.length%>)
+                    </button>
+                </h2>
+                <!-- Themen -->
+                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+                    data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <% if(suchenQryThema.length!=0){ var i=0; suchenQryThema.forEach(function(data){ %>
+                            <div class="karte">
+                                <div class="name" style="background-color: <%=data.Farbe %>;">
+                                    <a href="/suchen?suchen=<%= encodeURIComponent(data.ThemaName) %>">#<%=data.ThemaName %></a>
+                                </div>
+                                <div class="information">
+                                    <p></p>
+                                </div>
+                                <div class="thema">
+                                    <% if(thema_inhalt.length!=0){ var i=0; thema_inhalt.forEach(function(tag_u){ %>
+                                        <% if(data.TeilVon==tag_u.TeilVon || data.ThemaID==tag_u.TeilVon){ %>
+                                            <div class="tag" style="background-color: <%=tag_u.Farbe %>;">
+                                                <a href="/suchen?suchen=<%= encodeURIComponent(tag_u.ThemaName) %>">#<%=tag_u.ThemaName %></a>
+                                            </div>
+                                        <% } %>
+                                    <% i++; })} %>
+                                </div>
+                            </div>
+                        <% i++; }) %>
+                        <% } else{ %>
+                            <p>
+                                No Data Found
+                            </p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingTwo">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <% function counterLern(){ var i =0; %>
+                            <% if(Inhalt.length!=0){  Inhalt.forEach(function(data){ %>
+                                <% if(data.Übung==0){ %>
+                                    <% i++; }%>
+                                    
+                                    <%  });%>
+                                    <% } return i;};%>
+                            <% var lrn= counterLern(); %>
+                        Lernstoff (<%=(lrn) %>)
+                        
+                    </button>
+                </h2>
+                <!-- Lernstoff -->
+                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo"
+                    data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <% if(Inhalt.length!=0){ var i=0; Inhalt.forEach(function(data){ %>
+                            <% if(data.Übung==0){ %>
+                                <div class="karte">
+                                    <!-- Überschrift links oben -->
+                                    <% // Wenn PDF, dann direkt zur richtigen Seite verlinken
+                                    if (data.TypName == "Video") {
+                                        // Zeitstempel in Sekunden umwandeln
+                                        videoLink = data.Link;
+                                        console.log(data.Zeitstempel);
+                                        if (data.Zeitstempel != null) {
+                                            hms = data.Zeitstempel.split(':');
+                                            seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                            videoLink += '#t=' + seconds;
+                                        }
+                                    %>
+                                        <div class="name">
+                                            <a href="<%= videoLink %>" target="_blank"><%=data.InhaltName %></a>    
+                                        </div>
+                                    <% // Wenn Video, dann direkt zur richtigen Seite verlinken
+                                    } else if (data.TypName == "PDF") {
+                                        pdfLink = data.Link;
+                                        if (data.pSeite > 0) {
+                                            pdfLink += '#page=' + data.pSeite;
+                                        }
+                                    %>
+                                        <div class="name">
+                                            <a href="<%=pdfLink%>" target="_blank"><%=data.InhaltName %></a>    
+                                        </div> 
+                                    <% // Wenn YouTube, dann direkt zur richtigen Seite verlinken
+                                    } else if (data.TypName == "YouTube") {
+                                    %>
+                                        <div class="name">
+                                            <%
+                                            videoLink = data.Link;
+                                            videoLink = videoLink.replace("watch?v=", "");
+                                            videoId = videoLink.substring(videoLink.lastIndexOf('/')+1);
+                                            if (data.Zeitstempel != null) {
+                                                hms = data.Zeitstempel.split(':');
+                                                seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                                videoLink = 'https://www.youtube.com/embed/' + videoId + '?start=' + seconds;
+                                                videoExLink = 'https://www.youtube.com/watch?time_continue=' + seconds + '&v=' + videoId;
+                                            }
+                                                %>
+                                            <a href="<%= videoExLink %>" target="_blank"><%=data.InhaltName %></a>      
+                                        </div> 
+                                    <% // Bei Bildern und Links (mit Büchern) einfach der Link
+                                    } else {
+                                    %>
+                                        <div class="name">
+                                            <a href="<%= data.Link %>" target="_blank"><%=data.InhaltName %></a>    
+                                        </div>
+                                    <%
+                                    }
+                                    %>
+                                    <!-- Beschreibung unter Überschrift -->
+                                    <div class="information">
+                                        <p>
+                                            <%=data.Information %>
+                                        </p>
+                                    </div>
+                                    <!-- Prüfen welcher Typ der Inhalt ist und entsprechend anzeigen -->
+                                    <% // PDFs
+                                        if (data.TypName == "PDF") {
+                                    %>
+                                            <div class="spezifischerInhalt">
+                                                <iframe src="<%= pdfLink %>"></iframe>
+                                                <div class="materialName">
+                                                    <a href="<%= pdfLink %>" target="_blank">
+                                                        <%= data.MaterialName %>
+                                                    </a> 
+                                                </div>
+                                            </div>
+                                    <%
+                                        } // Videos
+                                        if (data.TypName == "Video") {
+                                    %>
+                                            <div class="spezifischerInhalt">
+                                                <video controls>
+                                                    <source src="<%= videoLink %>" type="video/mp4">
+                                                </video>
+                                            </div>
+                                    <%
+                                        } // Imgs
+                                        if (data.TypName == "Img") {
+                                    %>
+                                            <div class="spezifischerInhalt">
+                                                <a href="<%= data.Link %>" target="_blank">
+                                                    <img src="<%= data.Link %>" alt="<%= data.MaterialName %>">
+                                                </a>
+                                            </div>
+                                    <%
+                                        } // Bücher
+                                        if (data.TypName == "Buch") {
+                                    %>
+                                        <div class="information buchInfos spezifischerInhalt">
+                                                ISBN: <%=data.ISBN %><br>
+                                                Kapitel <%=data.Kapitel %>
+                                                Seite <%=data.bSeite %>
+                                            </p>
+                                        </div>
+                                    <% 
+                                        } 
+                                        if (data.TypName == "YouTube") {
+                                            // Zeitstempel in Sekunden umwandeln
+                                            videoLink = data.Link;
+                                            videoLink = videoLink.replace("watch?v=", "");
+                                            videoId = videoLink.substring(videoLink.lastIndexOf('/')+1);
+                                            if (data.Zeitstempel != null) {
+                                                hms = data.Zeitstempel.split(':');
+                                                seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                                videoLink = 'https://www.youtube.com/embed/' + videoId + '?start=' + seconds;
+                                                videoExLink = 'https://www.youtube.com/watch?time_continue=' + seconds + '&v=' + videoId;
+                                            }
+                                    %>
+                                            <div class="spezifischerInhalt">
+                                                <iframe src="<%=videoLink%>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                                            </div>
+
+                                    <!-- Verlinkung rechts unten -->
+                                    <% // Wenn PDF, dann direkt zur richtigen Seite verlinken
+                                    }
+                                    if (data.TypName == "PDF") {
+                                    %>
+                                        <div class="material">
+                                            <a href="<%= pdfLink %>" target="_blank">Lernmaterial öffnen</a>    
+                                        </div>
+                                    <% // Wenn Video, dann direkt zur richtigen Seite verlinken
+                                    } else if (data.TypName == "Video") {
+                                    %>
+                                        <div class="material">
+                                            <a href="<%= videoLink %>" target="_blank">Lernmaterial öffnen</a>    
+                                        </div> 
+                                    <% // Wenn YouTube, dann direkt zur richtigen Seite verlinken
+                                    } else if (data.TypName == "YouTube") {
+                                    %>
+                                        <div class="material">
+                                            <a href="<%= videoExLink %>" target="_blank">Lernmaterial öffnen</a>    
+                                        </div> 
+                                    <% // Bei Bildern und Links (mit Büchern) einfach der Link
+                                    } else {
+                                    %>
+                                        <div class="material">
+                                            <a href="<%= data.Link %>" target="_blank">Lernmaterial öffnen</a>    
+                                        </div>
+                                    <%
+                                    }
+                                    %>
+                                    <% if(userExperte==true){ %>
+                                        <!-- Button um zu einem Rucksack hinzu zu fügen -->
+                                        <div class="zuRucksack">
+                                            <form action="/suchergebnis" method="post">
+                                                <select class="openSelected<%=data.InhaltID %> closer" id="selectedRucksack" name="selectedRucksack" style="display: none">
+                                                    <% if(AllRucksack.length!=0){ AllRucksack.forEach(function(data_AllRucksack){ %>
+                                                        <% var inhaltEnthaltenCheck = false %>
+                                                        <% if(RucksackInhalt.length!=0){ RucksackInhalt.forEach(function(data_RucksackInhalt){ %>
+                                                            <% if(data_RucksackInhalt.InhaltID == data.InhaltID && data_RucksackInhalt.RucksackID == data_AllRucksack.RucksackID){ inhaltEnthaltenCheck = true }%>
+                                                        <% })} %>
+                                                        <% if(inhaltEnthaltenCheck == false){ %>
+                                                            <option value="<%=data_AllRucksack.RucksackID %>"><%=data_AllRucksack.RucksackName %></option>
+                                                        <% } %>
+                                                    <% })} %>
+                                                </select>
+                                                <input type="hidden" class="sucheZuRucksack" name="sucheZuRucksack">
+                                                <button class="openSelected<%=data.InhaltID %> closer btn btn-success" onclick="backToStandart()" type="submit" id="inhaltAddRuck" name="inhaltAddRuck" value="<%=data.InhaltID %>" style="display: none">Bestätigen</button>
+                                            </form>
+                                            <button class="openSelected<%=data.InhaltID %> opener btn btn-warning" onclick="openSelected(<%=data.InhaltID %>)">zu Rucksack hinzufügen</button>
+                                        </div>
+                                    <% } %>
+                                    <!-- Themen zum Lernstoff darunter anzeigen -->
+                                    <div class="thema">
+                                        <% if(Thema.length!=0){ var j=0; Thema.forEach(function(tag){ %>
+                                            <% if(tag.InhaltID==data.InhaltID){ %>
+                                                <div class="tag" style="background-color: <%=tag.Farbe %>;">
+                                                    <a href="/suchen?suchen=<%= encodeURIComponent(tag.ThemaName) %>">#<%=tag.ThemaName %></a>
+                                                </div>
+                                            <% } %>
+                                        <% i++; })} %>
+                                    </div>
+                                    <!-- Experte rechts oben -->
+                                    <div class="experte">
+                                        Erstellt von: <%=data.Nachname %>, <%=data.ErstelltAm %>
+                                    </div>
+                                </div>
+                            <% } %>
+                        <% i++; }) %>
+                        <% } else{ %>
+                            <p>
+                                No Data Found
+                            </p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+            <!-- Übungen -->
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        <% function counterUeb(){ var i =0; %>
+                            <% if(Inhalt.length!=0){  Inhalt.forEach(function(data){ %>
+                                <% if(data.Übung==1){ %>
+                                    <% i++; }%>
+                                    
+                                    <%  });%>
+                                    <% } return i;};%>
+                            <% var ueb= counterUeb(); %>
+                        Übungen (<%=(ueb) %>)
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                    data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <% if(Inhalt.length!=0){ var i=0; Inhalt.forEach(function(data){ %>
+                            <% if(data.Übung==1){ %>
+                                <div class="karte">
+                                    <!-- Überschrift links oben -->
+                                    <% // Wenn PDF, dann direkt zur richtigen Seite verlinken
+                                    if (data.TypName == "PDF") {
+                                        pdfLink = data.Link;
+                                        if (data.pSeite > 0) {
+                                            pdfLink += '#page=' + data.pSeite;
+                                        }
+                                    %>
+                                        <div class="name">
+                                            <a href="<%= pdfLink %>" target="_blank"><%=data.InhaltName %></a>    
+                                        </div>
+                                    <% // Wenn Video, dann direkt zur richtigen Seite verlinken
+                                    } else if (data.TypName == "Video") {
+                                        // Zeitstempel in Sekunden umwandeln
+                                        videoLink = data.Link;
+                                        console.log(data.Zeitstempel);
+                                        if (data.Zeitstempel != null) {
+                                            hms = data.Zeitstempel.split(':');
+                                            seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                            videoLink += '#t=' + seconds;
+                                        }
+                                    %>
+                                        <div class="name">
+                                            <a href="<%= videoLink %>" target="_blank"><%=data.InhaltName %></a>    
+                                        </div> 
+                                    <% // Wenn YouTube, dann direkt zur richtigen Seite verlinken
+                                    } else if (data.TypName == "YouTube") {
+                                    %>
+                                        <div class="name">
+                                            <a href="<%= videoExLink %>" target="_blank"><%=data.InhaltName %></a>    
+                                        </div> 
+                                    <% // Bei Bildern und Links (mit Büchern) einfach der Link
+                                    } else {
+                                    %>
+                                        <div class="name">
+                                            <a href="<%= data.Link %>" target="_blank"><%=data.InhaltName %></a>    
+                                        </div>
+                                    <%
+                                    }
+                                    %>
+                                    <!-- Beschreibung unter Überschrift -->
+                                    <div class="information">
+                                        <p>
+                                            <%=data.Information %>
+                                        </p>
+                                    </div>
+                                    <!-- Prüfen welcher Typ der Inhalt ist und entsprechend anzeigen -->
+                                    <% // PDFs
+                                        if (data.TypName == "PDF") {
+                                    %>
+                                            <div class="spezifischerInhalt">
+                                                <iframe src="<%= pdfLink %>"></iframe>
+                                                <div class="materialName">
+                                                    <a href="<%= pdfLink %>" target="_blank">
+                                                        <%= data.MaterialName %>
+                                                    </a> 
+                                                </div>
+                                            </div>
+                                    <%
+                                        } // Videos
+                                        if (data.TypName == "Video") {
+                                    %>
+                                            <div class="spezifischerInhalt">
+                                                <video controls>
+                                                    <source src="<%= videoLink %>" type="video/mp4">
+                                                </video>
+                                            </div>
+                                    <%
+                                        } // Imgs
+                                        if (data.TypName == "Img") {
+                                    %>
+                                            <div class="spezifischerInhalt">
+                                                <a href="<%= data.Link %>" target="_blank">
+                                                    <img src="<%= data.Link %>" alt="<%= data.MaterialName %>">
+                                                </a>
+                                            </div>
+                                    <%
+                                        } // Bücher
+                                        if (data.TypName == "Buch") {
+                                    %>
+                                        <div class="information buchInfos spezifischerInhalt">
+                                                ISBN: <%=data.ISBN %><br>
+                                                Kapitel <%=data.Kapitel %>
+                                                Seite <%=data.bSeite %>
+                                            </p>
+                                        </div>
+                                        <% 
+                                        } 
+                                        if (data.TypName == "YouTube") {
+                                            // Zeitstempel in Sekunden umwandeln
+                                            videoLink = data.Link;
+                                            videoId = videoLink.substring(videoLink.lastIndexOf('/')+1);
+                                            if (data.Zeitstempel != null) {
+                                                hms = data.Zeitstempel.split(':');
+                                                seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                                videoLink = 'https://www.youtube.com/embed/' + videoId + '?start=' + seconds;
+                                                videoExLink = 'https://www.youtube.com/watch?time_continue=' + seconds + '&v=' + videoId;
+                                                //https://www.youtube.com/watch?time_continue=64&v=dQw4w9WgXcQ
+                                            }
+                                    %>
+                                            <div class="spezifischerInhalt">
+                                                <iframe src="<%=videoLink%>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                                            </div>
+
+                                    <!-- Verlinkung rechts unten -->
+                                    <% // Wenn PDF, dann direkt zur richtigen Seite verlinken
+                                    }
+                                    if (data.TypName == "PDF") {
+                                    %>
+                                        <div class="material">
+                                            <a href="<%= pdfLink %>" target="_blank">Lernmaterial öffnen</a>    
+                                        </div>
+                                    <% // Wenn Video, dann direkt zur richtigen Seite verlinken
+                                    } else if (data.TypName == "Video") {
+                                    %>
+                                        <div class="material">
+                                            <a href="<%= videoLink %>" target="_blank">Lernmaterial öffnen</a>    
+                                        </div> 
+                                    <% // Wenn YouTube, dann direkt zur richtigen Seite verlinken
+                                    } else if (data.TypName == "YouTube") {
+                                    %>
+                                        <div class="material">
+                                            <a href="<%= videoExLink %>" target="_blank">Lernmaterial öffnen</a>    
+                                        </div> 
+                                    <% // Bei Bildern und Links (mit Büchern) einfach der Link
+                                    } else {
+                                    %>
+                                        <div class="material">
+                                            <a href="<%= data.Link %>" target="_blank">Lernmaterial öffnen</a>    
+                                        </div>
+                                    <%
+                                    }
+                                    %>
+                                    <% if(userExperte==true){ %>
+                                        <!-- Button um zu einem Rucksack hinzu zu fügen -->
+                                        <div class="zuRucksack">
+                                            <form action="/suchergebnis" method="post">
+                                                <select class="openSelected<%=data.InhaltID %> closer" id="selectedRucksack" name="selectedRucksack" style="display: none">
+                                                    <% if(AllRucksack.length!=0){ AllRucksack.forEach(function(data_AllRucksack){ %>
+                                                        <% var inhaltEnthaltenCheck = false %>
+                                                        <% if(RucksackInhalt.length!=0){ RucksackInhalt.forEach(function(data_RucksackInhalt){ %>
+                                                            <% if(data_RucksackInhalt.InhaltID == data.InhaltID && data_RucksackInhalt.RucksackID == data_AllRucksack.RucksackID){ inhaltEnthaltenCheck = true }%>
+                                                        <% })} %>
+                                                        <% if(inhaltEnthaltenCheck == false){ %>
+                                                            <option value="<%=data_AllRucksack.RucksackID %>"><%=data_AllRucksack.RucksackName %></option>
+                                                        <% } %>
+                                                    <% })} %>
+                                                </select>
+                                                <input type="hidden" class="sucheZuRucksack" name="sucheZuRucksack">
+                                               
+                                                <button class="openSelected<%=data.InhaltID %> closer btn btn-success" onclick="backToStandart()" type="submit" id="inhaltAddRuck" name="inhaltAddRuck" value="<%=data.InhaltID %>" style="display: none">Bestätigen</button>
+                                            </form>
+                                            <button class="openSelected<%=data.InhaltID %> opener btn btn-warning" onclick="openSelected(<%=data.InhaltID %>)">zu Rucksack hinzufügen</button>
+                                        </div>
+                                    <% } %>
+                                    <!-- Themen links unten -->
+                                    <div class="thema">
+                                        <% if(Thema.length!=0){ var j=0; Thema.forEach(function(tag){ %>
+                                            <% if(tag.InhaltID==data.InhaltID){ %>
+                                                <div class="tag" style="background-color: <%=tag.Farbe %>;">
+                                                    <a href="/suchen?suchen=<%= encodeURIComponent(tag.ThemaName) %>">#<%=tag.ThemaName %></a>
+                                                </div>
+                                            <% } %>
+                                        <% i++; })} %>
+                                    </div>
+                                    <!-- Experte rechts oben -->
+                                    <div class="experte">
+                                        Erstellt von: <%=data.Nachname %>, <%=data.ErstelltAm %>
+                                    </div>
+                                </div>
+                            <% } %>
+                        <% i++; }) %>
+                        <% } else{ %>
+                            <p>
+                                No Data Found
+                            </p>
+                        <% } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+    </div>
+    <script src="../public/script/suchergebnisse.js"></script>
+
+</body>
+
+</html>

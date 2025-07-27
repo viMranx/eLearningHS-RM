@@ -1,0 +1,53 @@
+<%- include('partials/header'); %>
+
+<%- include('partials/sidebar'); %>
+
+<!-- eigenes CSS -->
+<link href="../public/css/thema-edit.css" rel="stylesheet" type="text/css" />
+
+<!-- eigenes JS-Script (bisher nicht genutzt, Datei gelöscht)-->
+<!-- <script src="../public/script/thema-edit.js"></script> -->
+
+<div id="content" class="container-fluid">
+    <h3 class="ueberschrift">Themen bearbeiten</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Thema Name</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <form method="post" action="/remove-tags">
+                <% Themen.forEach(function(thema){ %>
+                    <tr valign="middle">
+                        <td> <%= thema.ThemaID %> </td>
+                        <td> <%= thema.ThemaName %> </td>
+                        <td>
+                            <input type="checkbox" name="<%= thema.ThemaID %>">
+                            <!-- <button type="button" class="btn btn-danger btn-sm" name="<%= thema.ThemaID %>">entfernen</button> -->
+                            </td>
+                    </tr>
+                <% }) %>
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td><input class="btn btn-danger" type="submit" value="Auswahl entfernen"></td>
+                </tr>
+            </form>
+            <tr>
+                <td colspan="3" style="text-align: center">
+                    <a href="add-tags" >
+                        <button type="button" class="btn btn-success">Weitere hinzufügen</button>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- page ende -->
+</div>
+</body>
+</html>

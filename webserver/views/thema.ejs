@@ -1,0 +1,41 @@
+<%- include('partials/header'); %>
+
+    <div id="sidebar">
+        <%- include('partials/sidebar'); %>
+    </div>
+
+    <div id="content">
+
+      <div id="suchetag">
+        
+       
+            <tbody>
+                <% 
+                if(thema.length!=0) {
+                    thema.forEach(function(data){ 
+                %>
+                    <tr>
+                        <td><a href="/suchen?suchen=<%= encodeURIComponent(data.ThemaName) %>">
+                            <%= data.ThemaName %>
+                        </a></td>
+                    </tr>
+                <% 
+                    });
+                }  else {
+                    %>
+                    <tr>
+                        <td>
+                            Kein Ergebnis
+                        </td>
+                    </tr> 
+                <% } %> 
+            </tbody>
+        </table>
+    </div>
+
+    </div>
+
+
+    </body>
+
+    </html>

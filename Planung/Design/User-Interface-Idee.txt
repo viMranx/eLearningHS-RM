@@ -1,0 +1,12 @@
+## User-Interface ##
+
+Ideen/Feature:
+
+1. Speicherbare Lernfortschritte ( z.b. Azubi ist im 2. Lehrjahr und bearbeitet "Lernabschnitt 2", hat jedoch keine Lust mehr und will
+nächste Woche weiterarbeiten. Hier könnte man ein Feature einbauen, dass dann an dem Punkt, wo der Azubi aufgehört hat, wieder einsteigt)
+
+2. Badges als Lernerfolge hinzufügen. (Idee: Nach jedem Lernabschnitt kann der Azubi Badges erlangen (Interaktives Lernen), diese Badges 
+werden dann im Profil vom Azubi angezeigt (Idee: Dient für den Ausbilder als eine Art "Überwachhung", heißt soviel wie: An welchem Punkt
+ist der Azubi im Moment und erfüllt er auch die Vorgaben vom Ausbilder. 
+Außerdem kann der Azubi nur weitermachen, wenn er die vorherigen Badges erlangt hat. (Idee: Für die Abschlussprüfungen werden als
+Vorausssetzung 20 von 27 Badges benötigt. Ohne die geforderte Anzahl kann "Vorbereitung auf die Abschlussprüfung" nicht eingesehen werden.

@@ -1,0 +1,766 @@
+<%- include('partials/header'); %>
+<%- include('partials/sidebar'); %>
+    
+    <link href="../public/css/suchergebnisse.css" rel="stylesheet" type="text/css" />
+    <link href="../public/css/rucksack.css" rel="stylesheet" type="text/css" />
+    
+    <!-- eigenes JS-Script-->
+    <script src="../public/script/rucksack.js"></script>
+
+
+    <div id="content">
+        <% if(Nachricht == "leerer_name"){ %>
+            <div class="alert alert-danger" role="alert">
+                Rucksackname darf nicht leer sein!
+            </div>
+        <% }else if(Nachricht == "neuer_rucksack"){ %>
+            <div class="alert alert-success" role="alert">
+                Neuer Rucksack angelegt.
+            </div>
+        <% }else if(Nachricht == "entfernt"){ %>
+            <div class="alert alert-success" role="alert">
+                Rucksack gelöscht.
+            </div>
+        <% }else if(Nachricht == "umbenannt"){ %>
+            <div class="alert alert-success" role="alert">
+                Rucksack wurde umbenannt.
+            </div>
+        <% }else if(Nachricht == "alle_inhalte_entfernt"){ %>
+            <div class="alert alert-success" role="alert">
+                Alle Inhalte dieses Rucksacks entfernt.
+            </div>
+        <% }else if(Nachricht == "alle_Nutzer_entfernt"){ %>
+            <div class="alert alert-success" role="alert">
+                Sämtlicher Nutzer-Zugriff entfernt.
+            </div>
+        <% }else if(Nachricht == "inhalt_entfernt"){ %>
+            <div class="alert alert-success" role="alert">
+                Inhalt aus Rucksack entfernt.
+            </div>
+        <% }else if(Nachricht == "inhalt_add"){ %>
+            <div class="alert alert-success" role="alert">
+                Inhalt zum Rucksack hinzugefügt.
+            </div>
+        <% }else if(Nachricht == "nutzer_entfernt"){ %>
+            <div class="alert alert-success" role="alert">
+                Nutzer-Zugriff auf Rucksack entfernt.
+            </div>
+        <% }else if(Nachricht == "nutzer_add"){ %>
+            <div class="alert alert-success" role="alert">
+                Nutzer-Zugriff auf Rucksack hinzugefügt.
+            </div>
+        <% } %>
+        <h3 class="ueberschrift">Rucksäcke</h3>
+        <div class="MeineRucksack">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="nav-item">
+                    <a href="#tab_mR" class="nav-link active" data-bs-toggle="tab">Meine Rucksäcke</a>
+                </li>
+            </ul>
+            <% if(userExperte==true){ %>
+                <form class="rucksackErstellen" action="/rucksack" method="post">
+                    <input type="text" id="rucksackName" name="rucksackName" placeholder="Rucksack Name">
+                    <button type="submit" class="btn btn-success" id="rucksackCreat" name="rucksackCreat"
+                        value="create">Rucksack Erstellen</button>
+                </form>
+            <% } %>
+            <!-- Rucksäcke anzeigen / durchlaufen-->
+            <% if(Rucksack.length!=0){ var i=0; Rucksack.forEach(function(data_rucksack){ %>
+                <div class="accordion" id="accordionExample">
+                    <div class="accordion-item">
+                        <h2 class="accordion-header" id="heading<%=i%>">
+                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#collapse<%=i%>" aria-expanded="false"
+                                aria-controls="collapse<%=i%>">
+
+                                <div class="openSelected<%=data_rucksack.RucksackID %> opener"><%=data_rucksack.RucksackName %></div>
+                                <!-- Für Azubis Fortschrittsbalken anzeigen -->
+                                <% if(userExperte==false){ %>
+
+                                    &emsp;<progress value="<%=data_rucksack.Fortschritt %>" max="100"></progress>
+                                    <% if(data_rucksack.Fortschritt==null){ %>
+                                        &emsp;0%
+                                    <% }else{ %>
+                                        &emsp;<%=data_rucksack.Fortschritt %>%
+                                    <% } %>
+                                <!-- Für Experte Anpassungs-Button anzeigen -->                                <% }else{ %>
+                                    <form action="/rucksack" method="post">
+                                        <input class="openSelected<%=data_rucksack.RucksackID %> closer" type="text" id="rucksackNameRen" name="rucksackNameRen" value="<%=data_rucksack.RucksackName %>" style="display: none" required>
+                                        <button class="openSelected<%=data_rucksack.RucksackID %> closer btn btn-success" onclick="backToStandart()" type="submit" id="rucksackReN" name="rucksackReN" value="<%=data_rucksack.RucksackID %>" style="display: none">Bestätigen</button>
+                                    </form>
+                                    <button class="openSelected<%=data_rucksack.RucksackID %> opener btn btn-warning" onclick="openSelected(<%=data_rucksack.RucksackID %>)">Umbenennen</button>
+                                    <form action="/rucksack" method="post">
+                                        <input
+                                            class="editName<%=data_rucksack.RucksackID %>"
+                                            type="text" id="rucksackNameRen"
+                                            name="rucksackNameRen"
+                                            value="<%=data_rucksack.RucksackName %>"
+                                            style="display: none">
+                                        <button
+                                            class="editName<%=data_rucksack.RucksackID %> btn btn-success"
+                                            onclick="editName(<%=data_rucksack.RucksackID %>)"
+                                            type="submit" id="rucksackReN"
+                                            name="rucksackReN"
+                                            value="<%=data_rucksack.RucksackID %>"
+                                            style="display: none">Bestätigen</button>
+                                    </form>
+                                    <form action="/rucksack-edit" method="GET">
+                                        <button type="submit" class="btn btn-warning"
+                                            id="rucksackEdit" name="rucksackEdit"
+                                            value="<%=data_rucksack.RucksackID %>">Bearbeiten</button>
+                                    </form>
+
+                                    <button class="btn btn-danger loeschung" data-bs-toggle="modal" data-bs-target="#Rucksack_Löschung_Dialog">
+                                        <p class="hidden_id" hidden><%=data_rucksack.RucksackID %></p>
+                                        Löschen
+                                    </button>
+
+                                    <!-- Dialog für Rucksack-Löschung -->
+                                    <div class="modal fade" id="Rucksack_Löschung_Dialog" tabindex="-1" aria-labelledby="Rucksack_Löschung_DialogLabel" aria-hidden="true">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5" id="Rucksack_Löschung_DialogLabel">Warnung! Folgende Inhalte werden entfernt:</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <ul>
+                                                        <li>
+                                                            Sämtliche Inhalte dieses Rucksacks
+                                                        </li>
+                                                        <li>
+                                                            Der Fortschritt dieses Rucksacks
+                                                        </li>
+                                                        <li>
+                                                            Sämtliche User-Verknüpfungen dieses Rucksacks
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>
+                                                    <form action="/rucksack" method="post">
+                                                         <!-- val wird hier per JS zugewiesen:  -->
+                                                        <button class="btn btn-danger" type="submit" id="rucksackDel" name="rucksackDel">Ja, ich bin mir sicher.</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <% } %>
+                            </button>
+                        </h2>
+                        <!-- Inhalt der Rucksäcke -->
+                        <div id="collapse<%=i%>" class="accordion-collapse collapse"
+                            aria-labelledby="heading<%=i%>" data-bs-parent="#accordionExample">
+                            <div class="accordion-body">
+                                <!-- Auswahlleiste: alle, lernstoffe, übungen-->
+                                <ul class="nav nav-tabs" id="myTab" role="tablist">
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link active" id="alles-tab<%=i%>"
+                                            data-bs-toggle="tab" data-bs-target="#alles-tab-pane<%=i%>"
+                                            type="button" role="tab" aria-controls="home-tab-pane"
+                                            aria-selected="true">Alles</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="ls-tab<%=i%>" data-bs-toggle="tab"
+                                            data-bs-target="#ls-tab-pane<%=i%>" type="button" role="tab"
+                                            aria-controls="profile-tab-pane"
+                                            aria-selected="false">Lernstoffe</button>
+                                    </li>
+                                    <li class="nav-item" role="presentation">
+                                        <button class="nav-link" id="ub-tab<%=i%>" data-bs-toggle="tab"
+                                            data-bs-target="#ub-tab-pane<%=i%>" type="button" role="tab"
+                                            aria-controls="contact-tab-pane"
+                                            aria-selected="false">Übungen</button>
+                                    </li>
+                                    <!-- Filter -->
+                                    <li id="rucksackFilter" class="dropdown"> 
+                                        <a class="dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                                            <i class="bi bi-funnel-fill"></i>&nbsp;Filter
+                                        </a>
+                                        <ul class="dropdown-menu">
+                                            <% if(Typen.length!=0){ var j=0; Typen.forEach(function(data_typen){ %>
+                                                <li>
+                                                    <a class="dropdown-item" href="#">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="" id="check<%=data_typen.TypName%>" onclick="filterKarten(<%=i%>, '<%=data_typen.TypName%>')"checked>
+                                                                <%=data_typen.TypName%>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            <% j++ })} %>
+                                          </ul>
+                                    </li>
+                                    <!-- PDF Generierung-->
+                                    <li>
+                                        <form action="/rucksackPDF" method="post" class="rucksackPDFGen">
+                                            <input type="hidden" name="name" class="form-control" placeholder="Dateiname" value="<%=data_rucksack.RucksackName %>">
+                                            <% if(Inhalt.length!=0){ var l = 1; Inhalt.forEach(function(data_inhalt_pdf){ // Fängt bei 1 zu zählen an, weil das erste Element der Rucksackname ist
+                                                if(data_inhalt_pdf.RucksackID==data_rucksack.RucksackID){ // richtiger Rucksack
+                                                    if (data_inhalt_pdf.TypID == 3) {  // Bild/PNG 
+                                            %>
+                                                        <input type="hidden" name="<%=l%>" value="<%=data_inhalt_pdf.Link %>">
+                                               <%   l++; }
+                                                }
+                                            })} %>
+                                            <% if(userExperte==true){ %>
+                                                <button class="btn btn-primary">PDF erstellen</button>
+                                            <% } %>
+                                        </form>
+                                    </li>
+                                </ul>
+                                <!-- Reiter alles, Lernstoff, übungen -->
+                                <div class="tab-content" id="myTabContent<%=j%>">
+                                    <!-- Reiter Alles -->
+                                    <div class="tab-pane fade show active" id="alles-tab-pane<%=i%>"
+                                        role="tabpanel" aria-labelledby="alles-tab" tabindex="0">
+                                        <!-- Inhalt durchlaufen, anzeigen -->
+                                        <% if(Inhalt.length!=0){var k=0; Inhalt.forEach(function(data_inhalt){
+                                            %>
+                                            <% if(data_inhalt.RucksackID==data_rucksack.RucksackID){ %>
+                                                <div class="karte <%=data_inhalt.TypName%>">
+                                                    <% // Wenn PDF, dann direkt zur richtigen Seite verlinken
+                                                        if (data_inhalt.TypName == "Video") {
+                                                            // Zeitstempel in Sekunden umwandeln
+                                                            videoLink = data_inhalt.Link;
+                                                            if (data_inhalt.Zeitstempel != null) {
+                                                                hms = data_inhalt.Zeitstempel.split(':');
+                                                                seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                                                videoLink += '#t=' + seconds;
+                                                            }
+                                                        %>
+                                                            <div class="name">
+                                                                <a href="<%= videoLink %>" target="_blank"><%=data_inhalt.InhaltName %></a>    
+                                                            </div>
+                                                        <% // Wenn Video, dann direkt zur richtigen Seite verlinken
+                                                        } else if (data_inhalt.TypName == "PDF") {
+                                                            pdfLink = data_inhalt.Link;
+                                                            if (data_inhalt.pSeite > 0) {
+                                                                pdfLink += '#page=' + data_inhalt.pSeite;
+                                                            }
+                                                        %>
+                                                            <div class="name">
+                                                                <a href="<%=pdfLink%>" target="_blank"><%=data_inhalt.InhaltName %></a>    
+                                                            </div> 
+                                                        <% // Wenn YouTube, dann direkt zur richtigen Seite verlinken
+                                                        } else if (data_inhalt.TypName == "YouTube") {
+                                                            videoLink = data_inhalt.Link;
+                                                            videoLink = videoLink.replace("watch?v=", "");
+                                                            videoId = videoLink.substring(videoLink.lastIndexOf('/')+1);
+                                                            if (data_inhalt.Zeitstempel != null) {
+                                                                hms = data_inhalt.Zeitstempel.split(':');
+                                                                seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                                                videoLink = 'https://www.youtube.com/embed/' + videoId + '?start=' + seconds;
+                                                                videoExLink = 'https://www.youtube.com/watch?time_continue=' + seconds + '&v=' + videoId;
+                                                            }
+                                                        %>
+                                                            <div class="name">
+                                                                <a href="<%= videoExLink %>" target="_blank"><%=data_inhalt.InhaltName %></a>      
+                                                            </div> 
+                                                        <% // Bei Bildern und Links (mit Büchern) einfach der Link
+                                                        } else {
+                                                        %>
+                                                            <div class="name">
+                                                                <a href="<%= data_inhalt.Link %>" target="_blank"><%=data_inhalt.InhaltName %></a>    
+                                                            </div>
+                                                        <%
+                                                        }
+                                                        %>
+                                                    <div class="information">
+                                                        <p>
+                                                            <%=data_inhalt.Information %>
+                                                        </p>
+                                                    </div>
+                                                    <!-- ZUTUN Prüfen welcher Typ der Inhalt ist und entsprechend anzeigen -->
+                                        <% // PDFs
+                                            if (data_inhalt.TypName == "PDF") {
+                                                pdfLink = data_inhalt.Link;
+                                                if (data_inhalt.pSeite > 0) {
+                                                    pdfLink += '#page=' + data_inhalt.pSeite;
+                                                }
+                                        %>
+                                                <div class="spezifischerInhalt">
+                                                    <iframe src="<%= pdfLink %>"></iframe>
+                                                    <div class="materialName">
+                                                        <a href="<%= pdfLink %>" target="_blank">
+                                                            <%= data_inhalt.MaterialName %>
+                                                        </a> 
+                                                    </div>
+                                                </div>
+                                        <%
+                                            } // Videos
+                                            if (data_inhalt.TypName == "Video") {
+                                                // Zeitstempel in Sekunden umwandeln
+                                                videoLink = data_inhalt.Link;
+                                                console.log(data_inhalt.Zeitstempel);
+                                                if (data_inhalt.Zeitstempel != null) {
+                                                    hms = data_inhalt.Zeitstempel.split(':');
+                                                    seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                                    videoLink += '#t=' + seconds;
+                                                }
+                                        %>
+                                                <div class="spezifischerInhalt">
+                                                    <video controls>
+                                                        <source src="<%= videoLink %>" type="video/mp4">
+                                                    </video>
+                                                </div>
+                                            <% 
+                                            } 
+                                            if (data_inhalt.TypName == "YouTube") {
+                                                // Zeitstempel in Sekunden umwandeln
+                                                videoLink = data_inhalt.Link;
+                                                videoLink = videoLink.replace("watch?v=", "");
+                                                videoId = videoLink.substring(videoLink.lastIndexOf('/')+1);
+                                                if (data_inhalt.Zeitstempel != null) {
+                                                    hms = data_inhalt.Zeitstempel.split(':');
+                                                    seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                                    videoLink = 'https://www.youtube.com/embed/' + videoId + '?start=' + seconds;
+                                                    videoExLink = 'https://www.youtube.com/watch?time_continue=' + seconds + '&v=' + videoId;
+                                                }
+                                        %>
+                                                <div class="spezifischerInhalt">
+                                                    <iframe src="<%=videoLink%>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                                                </div>
+
+                                        <%
+                                            } // Imgs
+                                            if (data_inhalt.TypName == "Img") {
+                                        %>
+                                                <div class="spezifischerInhalt">
+                                                    <a href="<%= data_inhalt.Link %>" target="_blank">
+                                                        <img src="<%= data_inhalt.Link %>" alt="<%= data_inhalt.MaterialName %>">
+                                                    </a>
+                                                </div>
+                                        <%
+                                            } // Bücher
+                                            if (data_inhalt.TypName == "Buch") {
+                                        %>
+                                            <div class="information buchInfos spezifischerInhalt">
+                                                    ISBN: <%=data_inhalt.ISBN %><br>
+                                                    Kapitel <%=data_inhalt.Kapitel %>
+                                                    Seite <%=data_inhalt.bSeite %>
+                                                </p>
+                                            </div>
+                                        <% 
+                                            } 
+                                        %>
+
+                                        <!-- ZUTUN Verlinkung rechts unten -->
+                                        <% // Wenn PDF, dann direkt zur richtigen Seite verlinken
+                                        if (data_inhalt.TypName == "PDF") {
+                                        %>
+                                            <div class="material">
+                                                <a href="<%= pdfLink %>" target="_blank">Lernmaterial öffnen</a>    
+                                            </div>
+                                        <% // Wenn Video, dann direkt zur richtigen Seite verlinken
+                                        } else if (data_inhalt.TypName == "Video") {
+                                        %>
+                                            <div class="material">
+                                                <a href="<%= videoLink %>" target="_blank">Lernmaterial öffnen</a>    
+                                            </div> 
+                                            <% // Wenn YouTube, dann direkt zur richtigen Seite verlinken
+                                        } else if (data_inhalt.TypName == "YouTube") {
+                                        %>
+                                            <div class="material">
+                                                <a href="<%= videoExLink %>" target="_blank">Lernmaterial öffnen</a>    
+                                            </div> 
+                                        <% // Bei Bildern und Links (mit Büchern) einfach der Link
+                                        } else {
+                                        %>
+                                            <div class="material">
+                                                <a href="<%= data_inhalt.Link %>" target="_blank">Lernmaterial öffnen</a>    
+                                            </div>
+                                        <%
+                                        }
+                                        %>
+                                                    <div class="thema">
+                                                        <% if(Thema.length!=0){
+                                                            Thema.forEach(function(data_thema){ %>
+                                                            <% if(data_thema.InhaltID==data_inhalt.InhaltID){ %>
+                                                                <div class="tag"
+                                                                    style="background-color: <%=data_thema.Farbe %>;">
+                                                                    <a href="/suchen?suchen=<%= encodeURIComponent(data_thema.ThemaName) %>">#<%=data_thema.ThemaName %></a>
+                                                                </div>
+                                                            <% } %>
+                                                        <%})} %>
+                                                    </div>
+                                                    <div class="experte">
+                                                        Erstellt von: <%=data_inhalt.Nachname %>,
+                                                            <%=data_inhalt.ErstelltAm %>
+                                                    </div>
+                                                </div>
+                                            <% } // data_inhalt.RucksackID==data_rucksack.RucksackID %>
+                                        <%k++; })} // foreach Inhalt %>
+                                    </div>
+                                    <!-- Reiter Lernstoffe -->
+                                    <div class="tab-pane fade" id="ls-tab-pane<%=i%>" role="tabpanel"
+                                        aria-labelledby="ls-tab" tabindex="0">
+                                        <!-- Inhalt durchlaufen, anzeigen -->
+                                        <% if(Inhalt.length!=0){var k=0; Inhalt.forEach(function(data_inhalt){
+                                            %>
+                                            <% if(data_inhalt.RucksackID==data_rucksack.RucksackID){ %>
+                                                <% if(data_inhalt.Übung==0){ %>
+                                                    <div class="karte <%=data_inhalt.TypName%>">
+                                                        <% // Wenn PDF, dann direkt zur richtigen Seite verlinken
+                                                            if (data_inhalt.TypName == "Video") {
+                                                                // Zeitstempel in Sekunden umwandeln
+                                                                videoLink = data_inhalt.Link;
+                                                                console.log(data_inhalt.Zeitstempel);
+                                                                if (data_inhalt.Zeitstempel != null) {
+                                                                    hms = data_inhalt.Zeitstempel.split(':');
+                                                                    seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                                                    videoLink += '#t=' + seconds;
+                                                                }
+                                                            %>
+                                                                <div class="name">
+                                                                    <a href="<%= videoLink %>" target="_blank"><%=data_inhalt.InhaltName %></a>    
+                                                                </div>
+                                                            <% // Wenn Video, dann direkt zur richtigen Seite verlinken
+                                                            } else if (data_inhalt.TypName == "PDF") {
+                                                                pdfLink = data_inhalt.Link;
+                                                                if (data_inhalt.pSeite > 0) {
+                                                                    pdfLink += '#page=' + data_inhalt.pSeite;
+                                                                }
+                                                            %>
+                                                                <div class="name">
+                                                                    <a href="<%=pdfLink%>" target="_blank"><%=data_inhalt.InhaltName %></a>    
+                                                                </div> 
+                                                            <% // Wenn YouTube, dann direkt zur richtigen Seite verlinken
+                                                            } else if (data_inhalt.TypName == "YouTube") {
+                                                            %>
+                                                            <div class="name">
+                                                                <a href="<%= videoExLink %>" target="_blank"><%=data_inhalt.InhaltName %></a>      
+                                                            </div> 
+                                                            <% // Bei Bildern und Links (mit Büchern) einfach der Link
+                                                            } else {
+                                                            %>
+                                                                <div class="name">
+                                                                    <a href="<%= data_inhalt.Link %>" target="_blank"><%=data_inhalt.InhaltName %></a>    
+                                                                </div>
+                                                            <%
+                                                            }
+                                                            %>
+                                                        <div class="information">
+                                                            <p>
+                                                                <%=data_inhalt.Information %>
+                                                            </p>
+                                                        </div>
+                                                        <!-- ZUTUN Prüfen welcher Typ der Inhalt ist und entsprechend anzeigen -->
+                                        <% // PDFs
+                                            if (data_inhalt.TypName == "PDF") {
+                                                pdfLink = data_inhalt.Link;
+                                                if (data_inhalt.pSeite > 0) {
+                                                    pdfLink += '#page=' + data_inhalt.pSeite;
+                                                }
+                                        %>
+                                                <div class="spezifischerInhalt">
+                                                    <iframe src="<%= pdfLink %>"></iframe>
+                                                    <div class="materialName">
+                                                        <a href="<%= pdfLink %>" target="_blank">
+                                                            <%= data_inhalt.MaterialName %>
+                                                        </a> 
+                                                    </div>
+                                                </div>
+                                        <%
+                                            } // Videos
+                                            if (data_inhalt.TypName == "Video") {
+                                                // Zeitstempel in Sekunden umwandeln
+                                                videoLink = data_inhalt.Link;
+                                                console.log(data_inhalt.Zeitstempel);
+                                                if (data_inhalt.Zeitstempel != null) {
+                                                    hms = data_inhalt.Zeitstempel.split(':');
+                                                    seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                                    videoLink += '#t=' + seconds;
+                                                }
+                                        %>
+                                                <div class="spezifischerInhalt">
+                                                    <video controls>
+                                                        <source src="<%= videoLink %>" type="video/mp4">
+                                                    </video>
+                                                </div>
+                                                
+                                        <% 
+                                            } 
+                                            if (data_inhalt.TypName == "YouTube") {
+                                                // Zeitstempel in Sekunden umwandeln
+                                                videoLink = data_inhalt.Link;
+                                                videoLink = videoLink.replace("watch?v=", "");
+                                                videoId = videoLink.substring(videoLink.lastIndexOf('/')+1);
+                                                if (data_inhalt.Zeitstempel != null) {
+                                                    hms = data_inhalt.Zeitstempel.split(':');
+                                                    seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                                    videoLink = 'https://www.youtube.com/embed/' + videoId + '?start=' + seconds;
+                                                    videoExLink = 'https://www.youtube.com/watch?time_continue=' + seconds + '&v=' + videoId;
+                                                }
+                                        %>
+                                                <div class="spezifischerInhalt">
+                                                    <iframe src="<%=videoLink%>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                                                </div>
+
+                                        <%
+                                            } // Imgs
+                                            if (data_inhalt.TypName == "Img") {
+                                        %>
+                                                <div class="spezifischerInhalt">
+                                                    <a href="<%= data_inhalt.Link %>" target="_blank">
+                                                        <img src="<%= data_inhalt.Link %>" alt="<%= data_inhalt.MaterialName %>">
+                                                    </a>
+                                                </div>
+                                        <%
+                                            } // Bücher
+                                            if (data_inhalt.TypName == "Buch") {
+                                        %>
+                                            <div class="information buchInfos spezifischerInhalt">
+                                                    ISBN: <%=data_inhalt.ISBN %><br>
+                                                    Kapitel <%=data_inhalt.Kapitel %>
+                                                    Seite <%=data_inhalt.bSeite %>
+                                                </p>
+                                            </div>
+                                        <% 
+                                            } 
+                                        %>
+
+                                        <!-- ZUTUN Verlinkung rechts unten -->
+                                        <% // Wenn PDF, dann direkt zur richtigen Seite verlinken
+                                        if (data_inhalt.TypName == "PDF") {
+                                        %>
+                                            <div class="material">
+                                                <a href="<%= pdfLink %>" target="_blank">Lernmaterial öffnen</a>    
+                                            </div>
+                                        <% // Wenn Video, dann direkt zur richtigen Seite verlinken
+                                        } else if (data_inhalt.TypName == "Video") {
+                                        %>
+                                            <div class="material">
+                                                <a href="<%= videoLink %>" target="_blank">Lernmaterial öffnen</a>    
+                                            </div> 
+                                        <% // Wenn YouTube, dann direkt zur richtigen Seite verlinken
+                                        } else if (data_inhalt.TypName == "YouTube") {
+                                        %>
+                                            <div class="material">
+                                                <a href="<%= videoExLink %>" target="_blank">Lernmaterial öffnen</a>    
+                                            </div> 
+                                        <% // Bei Bildern und Links (mit Büchern) einfach der Link
+                                        } else {
+                                        %>
+                                            <div class="material">
+                                                <a href="<%= data_inhalt.Link %>" target="_blank">Lernmaterial öffnen</a>    
+                                            </div>
+                                        <%
+                                        }
+                                        %>
+                                                        <div class="thema">
+                                                            <% if(Thema.length!=0){
+                                                                Thema.forEach(function(data_thema){ %>
+                                                                <% if(data_thema.InhaltID==data_inhalt.InhaltID){
+                                                                    %>
+                                                                    <div class="tag"
+                                                                        style="background-color: <%=data_thema.Farbe %>;">
+                                                                        <a href="/suchen?suchen=<%= encodeURIComponent(data_thema.ThemaName) %>">#<%=data_thema.ThemaName %></a>
+                                                                    </div>
+                                                                <% } %>
+                                                            <%})} %>
+                                                        </div>
+                                                        <div class="experte">
+                                                            Erstellt von: <%=data_inhalt.Nachname %>,
+                                                                <%=data_inhalt.ErstelltAm %>
+                                                        </div>
+                                                    </div>
+                                                <% } // data_inhalt.Übung==0 %>
+                                            <% } // data_inhalt.RucksackID==data_rucksack.RucksackID %>
+                                        <%k++; })} // foreach Inhalt %>
+                                    </div>
+                                    <!-- Reiter Übungen -->
+                                    <div class="tab-pane fade" id="ub-tab-pane<%=i%>" role="tabpanel"
+                                        aria-labelledby="ub-tab" tabindex="0">
+                                        <!-- Inhalt durchlaufen, anzeigen -->
+                                        <% if(Inhalt.length!=0){var k=0; Inhalt.forEach(function(data_inhalt){
+                                            %>
+                                            <% if(data_inhalt.RucksackID==data_rucksack.RucksackID){ %>
+                                                <% if(data_inhalt.Übung==1){ %>
+                                                    <div class="karte <%=data_inhalt.TypName%>">
+                                                        <% // Wenn PDF, dann direkt zur richtigen Seite verlinken
+                                                        if (data_inhalt.TypName == "Video") {
+                                                            // Zeitstempel in Sekunden umwandeln
+                                                            videoLink = data_inhalt.Link;
+                                                            if (data_inhalt.Zeitstempel != null) {
+                                                                hms = data_inhalt.Zeitstempel.split(':');
+                                                                seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                                                videoLink += '#t=' + seconds;
+                                                            }
+                                                        %>
+                                                            <div class="name">
+                                                                <a href="<%= videoLink %>" target="_blank"><%=data_inhalt.InhaltName %></a>    
+                                                            </div>
+                                                        <% // Wenn Video, dann direkt zur richtigen Seite verlinken
+                                                        } else if (data_inhalt.TypName == "PDF") {
+                                                            pdfLink = data_inhalt.Link;
+                                                            if (data_inhalt.pSeite > 0) {
+                                                                pdfLink += '#page=' + data_inhalt.pSeite;
+                                                            }
+                                                        %>
+                                                            <div class="name">
+                                                                <a href="<%=pdfLink%>" target="_blank"><%=data_inhalt.InhaltName %></a>    
+                                                            </div> 
+                                                        <% // Wenn YouTube, dann direkt zur richtigen Seite verlinken
+                                                        } else if (data_inhalt.TypName == "YouTube") {
+                                                        %>
+                                                            <div class="name">
+                                                                <a href="<%= videoExLink %>" target="_blank"><%=data_inhalt.InhaltName %></a>      
+                                                            </div> 
+                                                        <% // Bei Bildern und Links (mit Büchern) einfach der Link
+                                                        } else {
+                                                        %>
+                                                            <div class="name">
+                                                                <a href="<%= data_inhalt.Link %>" target="_blank"><%=data_inhalt.InhaltName %></a>    
+                                                            </div>
+                                                        <%
+                                                        }
+                                                        %>
+                                                        <div class="information">
+                                                            <p>
+                                                                <%=data_inhalt.Information %>
+                                                            </p>
+                                                        </div>
+                                                        <!-- ZUTUN Prüfen welcher Typ der Inhalt ist und entsprechend anzeigen -->
+                                        <% // PDFs
+                                            if (data_inhalt.TypName == "PDF") {
+                                                pdfLink = data_inhalt.Link;
+                                                if (data_inhalt.pSeite > 0) {
+                                                    pdfLink += '#page=' + data_inhalt.pSeite;
+                                                }
+                                        %>
+                                                <div class="spezifischerInhalt">
+                                                    <iframe src="<%= pdfLink %>"></iframe>
+                                                    <div class="materialName">
+                                                        <a href="<%= pdfLink %>" target="_blank">
+                                                            <%= data_inhalt.MaterialName %>
+                                                        </a> 
+                                                    </div>
+                                                </div>
+                                        <%
+                                            } // Videos
+                                            if (data_inhalt.TypName == "Video") {
+                                                // Zeitstempel in Sekunden umwandeln
+                                                videoLink = data_inhalt.Link;
+                                                console.log(data_inhalt.Zeitstempel);
+                                                if (data_inhalt.Zeitstempel != null) {
+                                                    hms = data_inhalt.Zeitstempel.split(':');
+                                                    seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                                    videoLink += '#t=' + seconds;
+                                                }
+                                        %>
+                                                <div class="spezifischerInhalt">
+                                                    <video controls>
+                                                        <source src="<%= videoLink %>" type="video/mp4">
+                                                    </video>
+                                                </div>
+                                                
+                                        <% 
+                                            } 
+                                            if (data_inhalt.TypName == "YouTube") {
+                                                // Zeitstempel in Sekunden umwandeln
+                                                videoLink = data_inhalt.Link;
+                                                videoLink = videoLink.replace("watch?v=", "");
+                                                videoId = videoLink.substring(videoLink.lastIndexOf('/')+1);
+                                                if (data_inhalt.Zeitstempel != null) {
+                                                    hms = data_inhalt.Zeitstempel.split(':');
+                                                    seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                                    videoLink = 'https://www.youtube.com/embed/' + videoId + '?start=' + seconds;
+                                                    videoExLink = 'https://www.youtube.com/watch?time_continue=' + seconds + '&v=' + videoId;
+                                                }
+                                        %>
+                                                <div class="spezifischerInhalt">
+                                                    <iframe src="<%=videoLink%>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                                                </div>
+
+                                        <%
+                                            } // Imgs
+                                            if (data_inhalt.TypName == "Img") {
+                                        %>
+                                                <div class="spezifischerInhalt">
+                                                    <a href="<%= data_inhalt.Link %>" target="_blank">
+                                                        <img src="<%= data_inhalt.Link %>" alt="<%= data_inhalt.MaterialName %>">
+                                                    </a>
+                                                </div>
+                                        <%
+                                            } // Bücher
+                                            if (data_inhalt.TypName == "Buch") {
+                                        %>
+                                            <div class="information buchInfos spezifischerInhalt">
+                                                    ISBN: <%=data_inhalt.ISBN %><br>
+                                                    Kapitel <%=data_inhalt.Kapitel %>
+                                                    Seite <%=data_inhalt.bSeite %>
+                                                </p>
+                                            </div>
+                                        <% 
+                                            } 
+                                        %>
+
+                                        <!-- ZUTUN Verlinkung rechts unten -->
+                                        <% // Wenn PDF, dann direkt zur richtigen Seite verlinken
+                                        if (data_inhalt.TypName == "PDF") {
+                                        %>
+                                            <div class="material">
+                                                <a href="<%= pdfLink %>" target="_blank">Lernmaterial öffnen</a>    
+                                            </div>
+                                        <% // Wenn Video, dann direkt zur richtigen Seite verlinken
+                                        } else if (data_inhalt.TypName == "Video") {
+                                        %>
+                                            <div class="material">
+                                                <a href="<%= videoLink %>" target="_blank">Lernmaterial öffnen</a>    
+                                            </div> 
+                                        <% // Wenn YouTube, dann direkt zur richtigen Seite verlinken
+                                        } else if (data_inhalt.TypName == "YouTube") {
+                                        %>
+                                            <div class="material">
+                                                <a href="<%= videoExLink %>" target="_blank">Lernmaterial öffnen</a>    
+                                            </div> 
+                                        <% // Bei Bildern und Links (mit Büchern) einfach der Link
+                                        } else {
+                                        %>
+                                            <div class="material">
+                                                <a href="<%= data_inhalt.Link %>" target="_blank">Lernmaterial öffnen</a>    
+                                            </div>
+                                        <%
+                                        }
+                                        %>
+                                                        <div class="thema">
+                                                            <% if(Thema.length!=0){
+                                                                Thema.forEach(function(data_thema){ %>
+                                                                <% if(data_thema.InhaltID==data_inhalt.InhaltID){
+                                                                    %>
+                                                                    <div class="tag"
+                                                                        style="background-color: <%=data_thema.Farbe %>;">
+                                                                        <a href="/suchen?suchen=<%= encodeURIComponent(data_thema.ThemaName) %>">#<%=data_thema.ThemaName %></a>
+                                                                    </div>
+                                                                <% } %>
+                                                            <%})} %>
+                                                        </div>
+                                                        <div class="experte">
+                                                            Erstellt von: <%=data_inhalt.Nachname %>,
+                                                                <%=data_inhalt.ErstelltAm %>
+                                                        </div>
+                                                    </div>
+                                                <% } // data_inhalt.Übung==1 %>
+                                            <% } // data_inhalt.RucksackID==data_rucksack.RucksackID %>
+                                        <%k++; })} // foreach Inhalt %>
+                                    </div>
+                                </div> <!-- myTabContent -->
+
+                            </div>
+                        </div> <!-- id ="collapseX"-->
+
+                    </div> <!-- class="accordion-item" -->
+                </div> <!-- id="accordionExample" -->
+            <% i++; }) // foreach Rucksäcke %>
+        <% } else{ %>
+            <p>
+                No Data Found
+            </p>
+        <% } %>
+    </div>
+</div>
+</div>
+</body>
+
+</html>

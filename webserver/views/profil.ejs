@@ -1,0 +1,123 @@
+<%- include('partials/header'); %>
+<%- include('partials/sidebar'); %>
+
+<!-- eigenes CSS -->
+<link href="../public/css/profil.css" rel="stylesheet" type="text/css" />
+
+<div id="content">
+    <div id="user_info">
+        <% Nutzer.forEach(function(data){ %>
+            <div class="container-fluid" style="margin-left: 15px; margin-top:15px">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Profil</h5>
+                        <div class="row" style="margin-top:20px">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Vorname</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <%= data.Vorname %>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Nachname</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <%=data.Nachname%>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Email</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <a href="mailto: max@mustermann.de"><%= data.Email %></a>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <h6 class="mb-0">Rolle</h6>
+                            </div>
+                            <div class="col-sm-9 text-secondary">
+                                <%if(data.Experte == 1){ %>
+                                    Experte
+                                <%}else{ %>
+                                    Azubi
+                                <%}%>
+                            </div>
+                        </div>
+                        <hr>
+                        <a class="btn btn-warning" href="pw-edit" class="text-decoration-none">
+                            <svg width="16" height="16" fill="currentColor" class="bi bi-pencil-fill">
+                                <path
+                                    d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z">
+                                </path>
+                            </svg>
+                            Passwort ändern
+                        </a>
+                    </div>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+    <div id="tags" class="container-fluid">
+        <h4>Meine Themen</h4>
+        <% if(Themen.length!=0){ %>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">ID</th>
+                        <th scope="col">Thema Name</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% Themen.forEach(function(thema){ %>
+                        <tr>
+                            <td> <%= thema.ThemaID %> </td>
+                            <td> <%= thema.ThemaName %> </td>
+                        </tr>
+                    <% }) %>
+                </tbody>
+            </table>
+            <% if(Benutzertyp == 1){ %>
+                <p style="text-align:center">
+                    <a class="btn btn-warning" href="thema-edit" class="text-decoration-none">
+                        <svg width="16" height="16" fill="currentColor" class="bi bi-pencil-fill">
+                            <path
+                                d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z">
+                            </path>
+                        </svg>
+                        Themen bearbeiten
+                    </a>
+                </p>
+            <% } %>
+        <% }else{ %>
+            <p>Keine Themen gefunden!</p>
+            <% if(Benutzertyp == 1){ %>
+                <p>
+                    <a href="add-tags" class="text-decoration-none">
+                        <svg width="16" height="16" fill="currentColor" class="bi bi-pencil-fill">
+                            <path
+                                d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708l-3-3zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207l6.5-6.5zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.499.499 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11l.178-.178z">
+                            </path>
+                        </svg>
+                        Themen hinzufügen
+                    </a>
+                </p>
+            <% } %>
+        <% } %> 
+
+    </div>
+    
+</div>
+
+<!-- page ende -->
+</div>
+
+</body>
+
+</html>

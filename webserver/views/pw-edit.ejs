@@ -1,0 +1,70 @@
+<%- include('partials/header'); %>
+
+<%- include('partials/sidebar'); %>
+
+<link href="../public/css/pw-edit.css" rel="stylesheet" type="text/css" />
+
+<div id="content">
+    <% if(Nachricht == 1){ %>
+        <div class="alert alert-danger" role="alert">
+            Falsche Eingabe bei aktuelles Passwort!
+        </div>
+    <% }else if(Nachricht == 2){ %>
+        <div class="alert alert-success" role="alert">
+            Passwort erfolgreich geändert!
+        </div>
+    <% }else if(Nachricht == 3){ %>
+        <div class="alert alert-danger" role="alert">
+            Neue Passwörter stimmen nicht überein!
+        </div>
+    <% } %>
+        
+    <div>
+        <form method="post" action="/pw-edit">
+            <% Nutzer.forEach(function(data){ %>
+                <div>
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <h5 class="card-title">Profil</h5>
+                            <hr>
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">Aktuelles Passwort</span>
+                                    </div>
+                                    <input type="text" class="form-control" name="password3">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">Neues Passwort</span>
+                                    </div>
+                                    <input type="text" class="form-control" name="password1">
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="basic-addon1">Passwort wiederholen</span>
+                                    </div>
+                                    <input type="text" class="form-control" name="password2">
+                                </div>
+                            </div>
+                            <hr>
+                            <input class="btn btn-primary" type="submit" value="Sichern">
+                        </div>
+                    </div>
+                </div>
+            <%})%>
+        </form>
+    </div>
+</div>
+
+</div>
+
+
+</body>
+</html>

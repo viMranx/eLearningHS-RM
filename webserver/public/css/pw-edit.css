@@ -1,0 +1,9 @@
+#content > div {
+  display: flex;
+  justify-content: center;
+}
+
+#content > div > * {
+  width: 500px;
+  margin-top: 30px;
+}

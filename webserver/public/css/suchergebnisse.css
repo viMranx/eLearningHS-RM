@@ -1,0 +1,123 @@
+.karte video, .karte iframe, .karte img {
+  max-width: 500px;
+  max-height: 150px;
+  margin-bottom: 30px;
+}
+
+.accordion {
+  width: 90%;
+  margin: auto;
+}
+
+.karte {
+  border-bottom: 1px outset black;
+  position: relative;
+}
+
+.karte .name {
+  top: 0; /* At the bottom. Use top:0 to append it to the top */
+  left: 0;
+  padding-left: 5px; /* Some padding */
+  padding-top: 5px; /* Some padding */
+  font-size: 25px;
+}
+
+.karte .experte {
+  position: absolute; /* Position the background text */
+  top: 0; /* At the bottom. Use top:0 to append it to the top */
+  right: 0;
+  padding-right: 5px; /* Some padding */
+  padding-top: 5px; /* Some padding */
+  opacity: 0.8;
+}
+
+.karte .information {
+  padding-bottom: 25px;
+  padding-left: 25px; /* Some padding */
+  padding-right: 25px; /* Some padding */
+}
+
+.karte .thema {
+  position: absolute; /* Position the background text */
+  bottom: 0; /* At the bottom. Use top:0 to append it to the top */
+  left: 0;
+  padding-left: 5px; /* Some padding */
+  padding-bottom: 5px; /* Some padding */
+  opacity: 0.8;
+}
+
+.karte .tag {
+  border: 1px outset black;
+  margin-right: 5px; /* margin between */
+  float: left;
+}
+
+.karte .material {
+  position: absolute; /* Position the background text */
+  bottom: 0; /* At the bottom. Use top:0 to append it to the top */
+  right: 0;
+  padding-right: 5px; /* Some padding */
+  padding-bottom: 5px; /* Some padding */
+  opacity: 0.8;
+}
+
+.karte .zuRucksack {
+  position: absolute; /* Position the background text */
+  bottom: 25px; /* At the bottom. Use top:0 to append it to the top */
+  right: 0;
+  padding-right: 5px; /* Some padding */
+  padding-bottom: 5px; /* Some padding */
+  opacity: 0.8;
+}
+
+.spezifischerInhalt {
+  margin-bottom: 30px;
+  margin-top: -10px;
+}
+
+.thema a{
+  text-decoration: none;
+}
+
+.tag {
+  align-items: center;
+  background-clip: padding-box;
+  background-color: #fa6400;
+  border: 1px solid transparent;
+  border-radius: 0.8rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  line-height: 0.6;
+  margin: 0;
+  min-height: 0rem;
+  padding: calc(.875rem - 5px) calc(1.5rem - 5px);
+  position: relative;
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  width: auto;
+  font-weight: 300;
+}
+
+.tag:hover,
+.tag:focus {
+  background-color: #fb8332;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+.tag:hover {
+  transform: translateY(-1px);
+}
+
+.tag:active {
+  background-color: #c85000;
+  box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
+  transform: translateY(0);
+}

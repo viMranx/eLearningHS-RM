@@ -1,0 +1,44 @@
+/* Leute */
+
+#content {
+  margin: 0px 50px;
+}
+
+p {
+  margin-bottom: 0px;
+}
+
+#leute {
+  width: 100%;
+  display: flex;
+}
+
+#leuteKarte {
+  width: 30%;
+  align-items: center;
+  margin: 15px;
+}
+#leuteKarte img {
+  width: 100%
+}
+
+#leuteListe {
+  width: 70%;
+  margin: 15px;
+}
+
+#tab_azu form {
+  display: flex;
+  align-items: center;
+}
+
+#tab_azu form textarea {
+  margin-right: 10px;
+  width: 50%;
+  min-width: 200px;
+  max-width: 300px;
+}
+
+#tab_azu td {
+  vertical-align: middle;
+}

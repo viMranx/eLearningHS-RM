@@ -1,0 +1,154 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&family=Roboto');
+
+#page {
+  display: grid;
+  grid-template-columns: 75px 1fr;
+  grid-template-rows: 75px 1fr;
+  grid-template-areas:
+    "header header"
+    "sidebar main";
+  height: 100vh;
+  font-family: 'Roboto';
+  font-size: 16px;
+}
+
+
+/* Header */
+
+#header {
+  grid-area: header;
+  background: #0365c7;
+  display: flex;
+  align-items: center;
+  color: white;
+  width: 100%;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+#header * {
+  color: white;
+  text-decoration: none;
+
+}
+
+#headerName {
+  font-size: 30px;
+  padding-left: 20px
+}
+
+#headerLogo * {
+    width: 70px;
+    padding: 2.5px;
+  }
+
+#headerSearch {
+  width: 100%;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+#headerSearchForm {
+  flex: 1;
+}
+
+#headerSearch form {
+  display: flex;
+}
+
+#headerSearch input {
+  color: black;
+  font-size: 20px;
+}
+
+#headerSearch button {
+  background: white;
+}
+
+#headerSearch i {
+  color: black;
+}
+
+#headerProfile button{
+  margin-right: 20px;
+  border: 2px solid white;
+}
+
+#profilbutton{
+  background-color: #0365c7;
+}
+
+
+/* Sidebar */
+
+#sidebar {
+  grid-area: sidebar;
+  font-size: 40px;
+  /* border-right: 1px solid lightgrey; */
+  width: 75px;
+  height: 100%;
+  
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+}
+
+#sidebar div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#sidebar div * {
+  color: black;
+}
+
+#sidebar a {
+  text-decoration: none;
+}
+#sidebar i:hover {
+  color: #0365c7;
+}
+
+.sidebar_icon {
+  height: 50px;
+}
+
+.sidebar_label {
+  height: 20px;
+  font-size: 10px;
+}
+
+
+/* Seitengerüst */
+
+#main {
+  grid-area: main;
+  padding: 10px;
+  display: grid;
+  grid-template-rows: 300px 1fr;
+  grid-template-areas: "continue" "themen";
+}
+
+
+/* Buttons */
+
+a .active {
+  background-color: #ff0 !important;
+}
+
+/* Alle Seiten */
+
+.ueberschrift {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0px;
+}
+
+a {
+  color: black;
+}
+
+/* Statusmeldungen/Banner */
+
+.alert{
+  text-align: center;
+}

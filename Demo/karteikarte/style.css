@@ -1,0 +1,107 @@
+/* Remove the navbar's default margin-bottom and rounded borders */
+.karte {
+  border-bottom: 1px outset black;
+  position: relative;
+}
+
+.karte .name {
+  top: 0; /* At the bottom. Use top:0 to append it to the top */
+  left: 0;
+  padding-left: 5px; /* Some padding */
+  padding-top: 5px; /* Some padding */
+  font-size: 25px;
+}
+
+.karte .experte {
+  position: absolute; /* Position the background text */
+  top: 0; /* At the bottom. Use top:0 to append it to the top */
+  right: 0;
+  padding-right: 5px; /* Some padding */
+  padding-top: 5px; /* Some padding */
+  opacity: 0.8;
+}
+
+.karte .information {
+  padding-bottom: 10px;
+  padding-left: 25px; /* Some padding */
+  padding-right: 25px; /* Some padding */
+}
+
+.karte .thema {
+  position: absolute; /* Position the background text */
+  bottom: 0; /* At the bottom. Use top:0 to append it to the top */
+  left: 0;
+  padding-left: 5px; /* Some padding */
+  padding-bottom: 5px; /* Some padding */
+  opacity: 0.8;
+}
+
+.karte .tag {
+  border: 1px outset black;
+  font-weight: bold;
+  float: left;
+}
+
+.karte .material {
+  position: absolute; /* Position the background text */
+  bottom: 0; /* At the bottom. Use top:0 to append it to the top */
+  right: 0;
+  padding-right: 5px; /* Some padding */
+  padding-bottom: 5px; /* Some padding */
+  opacity: 0.8;
+}
+
+div.head:hover div.status {
+  font-size: 225%;
+}
+
+div.status{
+  font-size: 200%;
+  transition: 0.2s;
+}
+
+html{
+  overflow-y: scroll;
+}
+
+h1{
+  text-shadow: 1px 1px black;
+}
+
+#page-container {
+	position: relative;
+	min-height: 100vh;
+}
+
+#content-wrap {
+	padding-bottom: 6rem;    /* Footer height */
+}
+
+#footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 6rem;            /* Footer height */
+}
+
+.loader {																/*Loading signal*/
+	border: 5px solid #f3f3f3;
+	border-radius: 50%;
+	border-top: 5px solid gray;
+	width: 50px;
+	height: 50px;
+	-webkit-animation: spin 2s linear infinite; /* Safari */
+	animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+	0% { -webkit-transform: rotate(0deg); }
+	100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
+

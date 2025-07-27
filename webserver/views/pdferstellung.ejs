@@ -1,0 +1,70 @@
+<!-- ### M ### -->
+<%- include('partials/header'); %>
+
+
+  <div id="sidebar">
+    <%- include('partials/sidebar'); %>
+  </div>
+  
+  <!-- ältere Bootstrap Version für SelectPicker notwendig -->
+  <link rel="stylesheet" href="../public/css/bootstrapv32.min.css">
+  <link rel="stylesheet" href="../public/css/bootstrap-select.css">
+  <script src="../public/script/bootstrap-select.js"></script>
+  <script src="../public/script/bootstrapv32.min.js"></script>
+  <script src="../public/script/moment.min.js"></script>
+  <script src="../public/script/bootstrap-datetimepicker.min.js"></script>
+
+  <link href="../public/css/inhalt.css" rel="stylesheet" type="text/css" />
+
+  <link href="../public/css/pdferstellung.css" rel="stylesheet" type="text/css" />
+
+  <div id="content">
+    <h3 class="ueberschrift">PDF-Erstellung </h3>
+    <div class="form px-4 pt-5">
+      <form action="pdferstellung" method="POST" enctype="multipart/form-data">
+        Dateiname: <input type="text" id="dataname" name="dataname" class="form-control" placeholder="Dateiname" required>
+        <br>
+        <input id="checkbox" name="checkbox" class="form-check-input" type="checkbox" onclick="myFunction()"
+          > PNG aus dem eigenen Rechner benutzen? (ja = checked box)</input><br><br>
+        <p id="Datei">Datei:</p>
+        <div id="select-file" style="display: none;">
+          <input type="file" id="input1" name="pdferstellung" class="form-control" multiple>
+          <br>
+        </div>
+        <div id="select-list" style="display: block;">
+          <select type="file" id="Materialpicker" class="selectpicker pb-5" data-live-search="true" name="materialnames"
+            title="Material" multiple>
+            <% if(qry.length!=0){ qry.forEach(function(data){ %>
+              <% if(data.TypID==3){ %>
+                <option>
+                  <%=data.MaterialName %>
+                </option>
+                <%} }) %>
+                  <% } %>
+          </select>
+        </div>
+        <input class="btn btn-primary" type="submit" value="Erstellen">
+      </form>
+    </div>
+  </div>
+  <script>
+    function myFunction() {
+      var checkBox = document.getElementById("checkbox");
+      var in1 = document.getElementById("select-file");// none false
+      var in2 = document.getElementById("select-list");// block true
+      if (checkBox.checked == true) {
+        in1.style.display = "block";
+        document.getElementById("input1").required = true;
+        in2.style.display = "none";
+        document.getElementById("Materialpicker").required = false;
+      } else if (checkBox.checked == false) {
+        in1.style.display = "none";
+        document.getElementById("input1").required = false;
+        in2.style.display = "block";
+        document.getElementById("Materialpicker").required = true;
+      }
+    }
+  </script>
+  </body>
+
+  </html>

@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <title>LearnAzur</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/png" href="../../public/assets/imgs/logoBlau.png" />
+
+  
+  <!-- JQUERY -->
+  <script src="../../public/script/jquery-latest.min.js"></script>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="../../public/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Bootstrap JS -->
+  <script src="../../public/script/bootstrap.bundle.min.js"></script>
+  <!-- Bootstrap Icons -->
+  <link rel="stylesheet" href="../../public/css/bootstrap-icons.css">
+  
+  <!-- CSS -->
+  <link href="../../public/css/style.css" rel="stylesheet" type="text/css" />
+  <!-- JS -->
+  <script type="text/javascript" src="../../public/script/script.js"></script>
+
+</head>
+
+<body>
+  <div id="page">
+    <div id="header">
+      <div id="headerLogo"><a href="home"><img src="../../public/assets/imgs/logoWeiss.png" /></a>
+      </div> 
+      <div id="headerName"><a href="home">LearnAzur</a></div>
+      <!-- Suchen -->
+      <div id="headerSearch" class="input-group">
+        <!-- Suchform -->
+        <div id="headerSearchForm">
+          <form action="/suchen" method="GET">
+            <input type="text" class="form-control" placeholder="Suche" aria-label="Suche" aria-describedby="button-addon2" id="suchen" name="suchen">
+            <button class="btn btn-outline-secondary" type="submit" id="button-addon2"><i class="bi bi-search"></i></button>
+          </form>
+        </div>
+        
+      </div>
+      <div class="dropdown" id="headerProfile">
+        <button class="btn btn-outline-dark dropdown-toggle bi bi-person" type="button" id="profilbutton" data-bs-toggle="dropdown" aria-expanded="false">
+          Profil
+        </button>
+        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+          <li><a class="dropdown-item" href="profil" style="color: #212529;">Profil-Seite</a></li>
+          <li><a class="dropdown-item" href="pw-edit" style="color: #212529;">Passwort ändern</a></li>
+            <li>
+              <form method="post" action="/logout">
+                <button class="dropdown-item" style="color: #dc3545;">Logout</button>
+              </form>
+            </li>
+        </ul>
+      </div>
+    </div>

@@ -1,0 +1,149 @@
+<%- include('partials/header'); %>
+
+  <%- include('partials/sidebar'); %>
+    <!-- eigenes JS-Script-->
+    <script src="../public/script/dashboard.js"></script>
+
+    <!-- eigenes CSS -->
+    <link href="../public/css/dashboard.css" rel="stylesheet" type="text/css" />
+
+    <div id="content">
+
+      <!-- Statusnachricht bei erfolgreichem Ändern der DB-Einträge -->
+      <% if(Nachricht == 1){ %>
+        <div class="alert alert-success" role="alert">
+            Erfolgreich gespeichert!
+        </div>
+      <% } %>
+      <% if(Benutzertyp==0){ %>
+        <div class="position-relative">
+          <div class="position-absolute top-0 start-50 translate-middle-x">
+            <br>
+            <h3>Themen Selbsteinschätzung (in %)</h3>
+          </div>
+        </div>
+        <div class="container-fluid p-5">
+          <br>
+          <% if(Tags.length!=0){ %>
+            <% let counter=0; %>
+            <form method="post" action="/dashboard">
+              <% Tags.forEach(function(data){ %>
+                <div class="row">
+                  <div class="col">
+                    <label for="<%= data.ThemaName %>" class="form-label">
+                      <h6>
+                        <%= data.ThemaName %>
+                      </h6>
+                    </label>
+                  </div>
+                  <div class="col-5">
+                    <input type="range" class="form-range" min="0" max="100" step="1" style="width: 100%"
+                      value="<%= Rates[counter].AzuRate %>" name="<%= Rates[counter].ThemaID %>">
+                  </div>
+                  <div class="col" id="result" style="font-size: 15px;">
+                    <%= Rates[counter].AzuRate %>
+                  </div>
+                </div>
+              <% counter++ })} %>
+              <input class="btn btn-primary" type="submit" value="Sichern">
+            </form>
+        </div>
+        <div class="position-relative">
+          <div class="position-absolute top-0 start-50 translate-middle-x">
+            <br>
+            <h3>Rucksack Selbsteinschätzung (in %)</h3>
+          </div>
+        </div>
+        <div class="container-fluid p-5">
+          <br>
+          <% if(Rucksack.length!=0){ %>
+            <% let counterR=0; %>
+            <form method="post" action="/dashboardRucksack">
+              <% Rucksack.forEach(function(data_rucksack){ %>
+                <div class="row">
+                  <div class="col">
+                    <label for="<%= data_rucksack.RucksackName %>" class="form-label">
+                      <h6>
+                        <%= data_rucksack.RucksackName %>
+                      </h6>
+                    </label>
+                  </div>
+                  <div class="col-5">
+                    <input type="range" class="form-range" min="0" max="100" step="1" style="width: 100%"
+                      value="<%= data_rucksack.Fortschritt %>" name="<%= data_rucksack.RucksackID %>">
+                  </div>
+                  <div class="col" id="result" style="font-size: 15px;">
+                    <%= data_rucksack.Fortschritt %>
+                  </div>
+                </div>
+              <% counterR++ })} %>
+              <input class="btn btn-primary" type="submit" value="Sichern">
+            </form>
+        </div>
+      <% }else{ %>
+        <div id="dashboard_exp">
+          <div class="container-fluid" id="dashboard_heading">
+            <h3> Wissens-Einschätzungen </h3>
+          </div>
+          <div class="container-fluid" id="azu_liste">
+            <% if(Nutzer.length!=0){ %>
+              <table class="table table-hover" style="cursor: pointer;">
+                <thead>
+                  <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Vorname</th>
+                    <th scope="col">Nachname</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% Nutzer.forEach(function(data){ %>
+                    <tr class="azurow">
+                      <td class="id">
+                        <%= data.NutzerID %>
+                      </td>
+                      <td class="vn">
+                        <%=data.Vorname %>
+                      </td>
+                      <td class="nn">
+                        <%=data.Nachname %>
+                      </td>
+                    </tr>
+                  <% }) %>
+                </tbody>
+              </table>
+            <% } else{ %>
+              <p>Keine Azubis gefunden!</p>
+            <% } %>
+          </div>
+          <div class="container-fluid" id="rates">
+            <div class='alert alert-danger' role='alert'>Keine Themen zu diesem Azubi gefunden!</div>
+            <p class="platzhalter">Bitte Azubi links auswählen</p>
+            <div id="rates_inner">
+              <form method="post" action="/dashboard">
+                <input type="text" id="user_id_submit" value="leer" name="user_id" hidden>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col">Thema</th>
+                      <th scope="col" style="width:20%">Einschätzung Azubi</th>
+                      <th scope="col" style="width:40%">Einschätzung Experte</th>
+                    </tr>
+                  </thead>
+                    <tbody id="azu_rates_body">
+                      <!-- insert Code here -->
+                    </tbody>
+                </table>
+                <input class="btn btn-primary" type="submit" value="Sichern">
+              </form>
+            </div>
+          </div>
+        </div>
+      <% } %>
+    </div>
+    
+    <!-- page ende -->
+    </div>
+
+    </body>
+
+    </html>

@@ -1,0 +1,82 @@
+<%- include('partials/header'); %>
+
+    <div id="sidebar">
+        <%- include('partials/sidebar'); %>
+    </div>
+    
+<link href="../public/css/home.css" rel="stylesheet" type="text/css" />
+
+    <div id="content">
+        <div id="wk-msg">
+            <h2>Willkommen <%=userName%> auf <span>LearnAzur</span></h2>
+            <p>Suche nach Themen, Leuten oder Rucksäcken und starte durch!</p>
+        </div>
+        
+        <div id="wk-con">
+            <div id="letzteThemen">
+                <h3>Letzte Suchen</h3>
+                <table class="table table-hover row-clickable">
+                    <tbody>
+                        <% 
+                        if(NvSuchen.length!=0) {
+                            NvSuchen.forEach(function(data){ 
+                        %>
+                            <tr>
+                                <td><a href="suchen?suchen=<%= encodeURIComponent(data.ns_suche) %>">
+                                    <%= data.ns_suche %>
+                                </a></td>
+                            </tr>
+                        <% 
+                            });
+                        }  else {
+                            %>
+                            <tr>
+                                <td>
+                                    Such drauf los!
+                                </td>
+                            </tr> 
+                        <% } %> 
+                    </tbody>
+                </table>
+            </div>
+        
+            <!-- Anpassen auf Experten und keine Experten, akutell einfach Rucksäcke -->
+            <div id="eigeneRucksaecke">
+                <h3>Eigene Rucksäcke</h3>
+                <table class="table table-hover row-clickable">
+                    <tbody>
+                        <% 
+                        if(eigeneRucks.length!=0) {
+                            eigeneRucks.forEach(function(data){ 
+                        %>
+                            <tr>
+                                <td><a href="/rucksack">
+                                    <%= data.RucksackName %>
+                                </a></td>
+                            </tr>
+                        <% 
+                            });
+                        }  else {
+                            %>
+                            <tr>
+                                <td>
+                                    Such drauf los!
+                                </td>
+                            </tr> 
+                        <% } %> 
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+        
+
+        
+    </div>
+
+
+    <!-- page ende -->
+    </div>
+    </body>
+
+    </html>

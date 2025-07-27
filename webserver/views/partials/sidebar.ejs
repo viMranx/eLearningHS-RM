@@ -1,0 +1,36 @@
+<div id="sidebar">
+  <div>
+    <a href="home" class="sidebar_icon"><i class="bi bi-house"></i></a>
+    <a href="home" class="sidebar_label">Home</a>
+  </div>
+  <div>
+    <a href="themen" class="sidebar_icon"><i class="bi bi-archive"></i></a>
+    <a href="themen" class="sidebar_label">Themen</a>
+  </div>
+  <div>
+    <a href="leute" class="sidebar_icon"><i class="bi bi-people"></i></a>
+    <a href="leute" class="sidebar_label">Leute</a>
+  </div>
+  <div>
+    <a href="rucksack" class="sidebar_icon"><i class="bi bi-briefcase"></i></a>
+    <a href="rucksack" class="sidebar_label">Rucksäcke</a>
+  </div>
+  <% if(userExperte==true){ %>
+  <div>
+    <a href="pdferstellung" class="sidebar_icon"><i class="bi bi-file-earmark-pdf"></i>
+    <a href="pdferstellung" class="sidebar_label">PDF-Gen</a>
+  </div>
+  <div>
+    <a href="material" class="sidebar_icon"><i class="bi bi-upload"></i></a>
+    <a href="material" class="sidebar_label">Materialien</a>
+  </div>
+  <div>
+    <a href="inhalt" class="sidebar_icon"><i class="bi bi-plus-square"></i></a>
+    <a href="inhalt" class="sidebar_label">Inhalte</a>  
+  </div>
+  <%}%>
+  <div>
+    <a href="dashboard" class="sidebar_icon"><i class="bi bi-speedometer"></i></a>
+    <a href="dashboard" class="sidebar_label">Fortschritte</a>
+  </div>
+</div>

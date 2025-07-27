@@ -1,0 +1,91 @@
+  
+    /*Leute*/
+    #leute {
+      display: flex;
+      grid-area: main;
+      grid-template-columns: 50% 50%;
+      grid-template-rows: 100%;
+      grid-template-areas: "leuteKarte" "leuteListe";
+    }
+  
+    #leuteKarte {
+      grid-area: leute;
+      width: 100%;
+      align-items: center;
+      padding: 15px;
+    }
+    
+  
+    #leuteListe {
+      width: 100%;
+      display: grid;
+      grid-area:leute;
+      padding: 15px;
+      margin-top:  50px;
+      /*Tabellengröße fixiert->nach andere Möglichkeit schauen*/
+    }
+  
+  
+    #layoutKarte {
+      align-items: center;
+      text-align: center;
+      width: 600px;
+      height:250px;
+  
+    }
+  
+    .card-img-top {
+      margin-top: 20px; 	
+      border-radius: 50%;
+      border-color: white;
+      background-color: white;
+  
+  }
+  
+  .card {
+    width: 40rem; margin-top: 30px;
+  
+  }
+  
+  
+  .tableFixHead {
+    overflow-y: auto; /* make the table scrollable if height is more than 200 px  */
+    height: 500px; /* gives an initial height of 200px to the table */
+  }
+  
+  .tableFixHead thead th {
+    position: sticky; /* make the table heads sticky */
+    top: 0px; /* table head will be placed from the top of the table and sticks to it */
+  }
+  
+  .imgName {
+    width: 150px; height:150px;
+  }
+  
+  
+  .hidden {
+    width: 150px;
+    height:150px;
+    background-color:white ;
+    display: none;
+  }
+  
+  .card-title {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  h5 {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  #platzhalter {
+    height: 160px;
+    width: 160px;
+    margin: 0 auto;
+  
+  }
+  

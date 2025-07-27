@@ -1,0 +1,32 @@
+#content {
+    margin: 0px 50px;
+}
+
+#dashboard_exp{
+    font-size: 15px;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    grid-template-rows: 50px 1fr;
+    grid-gap: 20px;
+    grid-template-areas:
+    "header header"
+    "liste_azu both_rates";
+}
+
+#dashboard_heading{
+    text-align: center;
+    padding-top: 10px;
+    grid-area: header;
+}
+
+#azu_liste{
+    grid-area: liste_azu;
+}
+
+#rates{
+    grid-area: both_rates;
+}
+
+td {
+    vertical-align: middle;
+}

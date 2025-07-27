@@ -1,0 +1,24 @@
+#content{
+    font-size: 15px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+    grid-template-areas:
+    "profil tag_list";
+    margin: 50px;
+}
+
+#user_info{
+    grid-area: profil;
+}
+
+#tags{
+    grid-area: tag_list;
+}
+
+p {
+    text-align: center
+}
+h4 {
+    margin-top: 15px;
+}

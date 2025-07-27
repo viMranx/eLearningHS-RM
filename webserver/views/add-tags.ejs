@@ -1,0 +1,42 @@
+<%- include('partials/header'); %>
+<%- include('partials/sidebar'); %>
+
+<!-- eigenes CSS -->
+<link href="../public/css/add-tags.css" rel="stylesheet" type="text/css" />
+
+<div id="content">
+    <h3 class="ueberschrift">Themen hinzufügen</h3>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Thema Name</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <form method="post" action="/add-tags">
+                <% Themen.forEach(function(thema){ %>
+                    <tr valign="middle">
+                        <td> <%= thema.ThemaID %> </td>
+                        <td> <%= thema.ThemaName %> </td>
+                        <td> <input type="checkbox" name="<%= thema.ThemaID %>"></td>
+                            <!-- <button type="button" class="btn btn-danger btn-sm" name="<%#= thema.ThemaID %>">hinzufügen</button> -->
+                    </tr>
+                <% }) %>
+                <tr>
+                    <td colspan="3" style="text-align: center">
+                        <input class="btn btn-success" type="submit" value="Auswahl hinzufügen">
+                    </td>
+                </tr>
+            </form>
+        </tbody>
+    </table>
+</div>
+
+<!-- page ende -->
+</div>
+
+</body>
+
+</html>

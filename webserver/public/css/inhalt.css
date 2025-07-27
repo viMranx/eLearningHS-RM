@@ -1,0 +1,37 @@
+#content {
+  margin: 0px 50px;
+}
+
+.ueberschrift {
+  font-size: 28px;
+}
+
+
+#existingContent td {
+  vertical-align: middle;
+}
+
+
+#input1f, #input2f, #input3f, #btnNC, #datetimepicker {
+  margin-bottom: 20px;
+}
+
+#existingContent{
+  width: 50%;
+  float: left;
+  margin: auto;
+}
+#newContent{
+  width: 45%;
+  float: right;
+  margin: auto;
+}
+a{
+  color: black;
+  text-decoration: underline;
+}
+
+.bootstrap-select {
+  width: 100% !important;
+}
+

@@ -1,0 +1,88 @@
+#page {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  grid-template-rows: 100px 1fr;
+  grid-template-areas:
+    "header header"
+    "sidebar main";
+  height: 100vh;
+}
+
+#header {
+  grid-area: header;
+  background: #007fff;
+  display: flex;
+  align-items: center;
+  font-size: 30px;
+  color: white;
+
+}
+
+#header * {
+  color: white;
+  text-decoration: none;
+}
+
+#headerName {
+  padding-left: 20px;
+  width: 250px;
+}
+
+#headerCheck {
+  width: 50px;
+}
+
+#headerSearch {
+  width: 100%;
+  margin: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+#headerSearch input {
+  color: black;
+  font-size: 20px;
+}
+
+#headerSearch button {
+  background: white;
+}
+
+#headerSearch i {
+  color: black;
+}
+
+#headerProfile {
+  width: 100px;
+  display: flex;
+  justify-content: center;
+}
+
+#sidebar {
+  grid-area: sidebar;
+  display: flex;
+  font-size: 50px;
+  flex-direction: column;
+  align-items: center;
+  border-right: 1px solid lightgrey;
+}
+
+#sidebar i {
+  color: black;
+}
+
+#sidebar i:hover {
+  color: #007fff;
+}
+
+#main {
+  grid-area: main;
+  padding: 10px;
+  display: grid;
+  grid-template-rows: 300px 1fr;
+  grid-template-areas: "continue" "themen";
+}
+
+.themen {
+  margin: 20px;
+}

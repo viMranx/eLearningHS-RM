@@ -1,0 +1,13 @@
+#content{
+    font-size: 15px;
+    padding-left: 5%;
+    padding-right: 5%;
+}
+
+tr{
+    height: 50px;
+}
+
+.btn-success{
+    text-align: center
+}

@@ -1,0 +1,116 @@
+<%- include('partials/header'); %>
+
+    <div id="sidebar">
+        <%- include('partials/sidebar'); %>
+    </div>
+    <link href="../public/css/rucksack.css" rel="stylesheet" type="text/css" />
+
+    <div id="content">
+        <h3 class="ueberschrift">Rucksack <%= auswahlRucksack %> bearbeiten</h3>
+        <div class="EditRucksack">
+            <ul class="nav nav-tabs" id="myTab">
+                <li class="nav-item">
+                    <a href="#tab_inhalte" class="nav-link active" data-bs-toggle="tab">Inhalte</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#tab_nutzer" class="nav-link" data-bs-toggle="tab">Nutzer</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div id="tab_inhalte" class="container tab-pane active">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Inhalt</th>
+                                <th>Material</th>
+                                <th><form action="/rucksack" method="post">
+                                    <button type="submit" class="btn btn-danger" id="inhaltEntfAll" name="inhaltEntfAll" value="<%=auswahlRucksack %>">Alle Entfernen</button>
+                                </form></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(InhaltA.length!=0){ var i=0; InhaltA.forEach(function(data_inhaltA){ %>
+                                <% inRucksack=false %>
+                                <% if(InhaltR.length!=0){ var i=0; InhaltR.forEach(function(data_inhaltR){ %>
+                                    <% if(data_inhaltA.InhaltID==data_inhaltR.InhaltID){ %>
+                                        <% inRucksack=true %>
+                                    <% } %>
+                                <% i++; })} %>
+                                <tr>
+                                    <td><%=data_inhaltA.InhaltName %></td>
+                                    <td><%=data_inhaltA.MaterialName %></td>
+                                    <td>
+                                        <form action="/rucksack" method="post">
+                                            <input type="text" id="rucksackNr" name="rucksackNr" value="<%=auswahlRucksack %>" hidden>
+                                            <% if(inRucksack==true){ %>
+                                                <button type="submit" class="btn btn-danger" id="inhaltEntf" name="inhaltEntf" value="<%=data_inhaltA.InhaltID %>">Entfernen</button>
+                                            <% } else{ %>
+                                                <button type="submit" class="btn btn-success" id="inhaltAdd" name="inhaltAdd" value="<%=data_inhaltA.InhaltID %>">Hinzufügen</button>
+                                            <% } %>
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% i++; }) %>
+                            <% } else{ %>
+                                <td colspan="3">
+                                    No Data Found
+                                </td>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+                <div id="tab_nutzer" class="container tab-pane">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Vorname</th>
+                                <th>Nachname</th>
+                                <th>Fortschritt</th>
+                                <th>
+                                    <form action="/rucksack" method="post">
+                                        <button type="submit" class="btn btn-danger" id="nutzerEntfAll" name="nutzerEntfAll" value="<%=auswahlRucksack %>">Alle Entfernen</button>
+                                    </form>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(NutzerA.length!=0){ var i=0; NutzerA.forEach(function(data_nutzerA){ %>
+                                <% inRucksack=false %>
+                                <tr>
+                                    <td><%=data_nutzerA.Vorname %></td>
+                                    <td><%=data_nutzerA.Nachname %></td>
+                                    <td>
+                                        <% if(NutzerR.length!=0){ var i=0; NutzerR.forEach(function(data_nutzerR){ %>
+                                            <% if(data_nutzerA.NutzerID==data_nutzerR.NutzerID){ %>
+                                                <progress value="<%=data_nutzerR.Fortschritt %>" max="100"></progress>&emsp;<%=data_nutzerR.Fortschritt %>%
+                                                <% inRucksack=true %>
+                                            <% } %>
+                                        <% i++; })} %>
+                                    </td>
+                                    <td>
+                                        <form action="/rucksack" method="post">
+                                            <input type="text" id="rucksackNr" name="rucksackNr" value="<%=auswahlRucksack %>" hidden>
+                                            <% if(inRucksack==true){ %>
+                                                <button type="submit" class="btn btn-danger" id="nutzerEntf" name="nutzerEntf" value="<%=data_nutzerA.NutzerID %>">Entfernen</button>
+                                            <% } else{ %>
+                                                <button type="submit" class="btn btn-success" id="nutzerAdd" name="nutzerAdd" value="<%=data_nutzerA.NutzerID %>">Teilen</button>
+                                            <% } %> 
+                                        </form>
+                                    </td>
+                                </tr>
+                            <% i++; }) %>
+                            <% } else{ %>
+                                <td colspan="3">
+                                    No Data Found
+                                </td>
+                            <% } %> 
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+

@@ -1,0 +1,107 @@
+<%- include('partials/header'); %>
+
+
+  <div id="sidebar">
+    <%- include('partials/sidebar'); %>
+  </div>
+  <link href="../public/css/material.css" rel="stylesheet" type="text/css" />
+
+  <div id="content">
+    <h3 class="ueberschrift">Material</h3>
+    <div id="existingContent">
+      <table class="table">
+        <tbody>
+          <% if(Eigene.length!=0){ var i=0; Eigene.forEach(function(data_eigene){ %>
+            <tr>
+              <td>                
+                <% // Wenn PDF, dann direkt zur richtigen Seite verlinken
+                if (data_eigene.TypName == "Video") {
+                    // Zeitstempel in Sekunden umwandeln
+                    videoLink = data_eigene.Link;
+                    console.log(data.Zeitstempel);
+                    if (data_eigene.Zeitstempel != null) {
+                        hms = data_eigene.Zeitstempel.split(':');
+                        seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                        videoLink += '#t=' + seconds;
+                    }
+                %>
+                        <a class="editName<%=data_eigene.MaterialID %>" href="<%= videoLink %>" target="_blank" ><%=data_eigene.InhaltName %><%=data_eigene.MaterialName %></a>    
+                <% // Wenn Video, dann direkt zur richtigen Seite verlinken
+                } else if (data_eigene.TypName == "PDF") {
+                    pdfLink = data_eigene.Link;
+                    if (data_eigene.pSeite > 0) {
+                        pdfLink += '#page=' + data_eigene.pSeite;
+                    }
+                %>
+                  <a class="editName<%=data_eigene.MaterialID %>" href="<%=pdfLink%>" target="_blank" ><%=data_eigene.InhaltName %><%=data_eigene.MaterialName %></a>     
+                <% // Bei Bildern und Links (mit Büchern) einfach der Link
+                } else {
+                %>
+                        <a class="editName<%=data_eigene.MaterialID %>" href="<%= data_eigene.Link %>" target="_blank" ><%=data_eigene.InhaltName %><%=data_eigene.MaterialName %></a>    
+                <%
+                }
+                %>
+                <form action="/material" method="post">
+                  <input class="openSelected<%=data_eigene.MaterialID %> closer" type="text" id="materialName" name="materialName" value="<%=data_eigene.MaterialName %>" style="display: none">
+              <td>
+                  <button class="openSelected<%=data_eigene.MaterialID %> closer btn btn-success" onclick="backToStandart()" type="submit" id="materialReN" name="materialReN" value="<%=data_eigene.MaterialID %>" style="display: none">Bestätigen</button>
+                </form>
+                <button class="openSelected<%=data_eigene.MaterialID %> opener btn btn-warning" onclick="openSelected(<%=data_eigene.MaterialID %>)">Umbenennen</button>
+              </td>
+              <td>
+                <form action="/material" method="post">
+                  <button type="submit" class="btn btn-danger" id="materialDel" name="materialDel" value="<%=data_eigene.MaterialID %>">Löschen</button>
+                </form>
+              </td>
+            </tr>
+          <% i++; }) %>
+          <% } else{ %>
+            <td colspan="3">
+              No Data Found
+            </td>
+          <% } %>
+        </tbody>
+      </table>
+    </div>
+    <br>
+    <div id="newContent">
+      <h3 class="ueberschrift">Neues Material</h3>
+      <div class="form px-4 pt-5">
+        <form action="/materialUpload" method="post" enctype="multipart/form-data">
+  
+          <input type="text" name="name" class="form-control" placeholder="Dateiname" required>
+          <br>
+          <div class="dropdown pb-4">
+            <button class="btn btn btn-light dropdown-toggle border border-secondary" type="button" id="Dateityp"
+              data-bs-toggle="dropdown" aria-expanded="false" aria-required="true" name="dateityp">
+              Dateityp
+            </button>
+            <ul class="dropdown-menu" aria-labelledby="Dateityp" required>
+              <li><a class="dropdown-item" value="pdfs">PDF</a></li>
+              <li><a class="dropdown-item" value="imgs">Img</a></li>
+              <li><a class="dropdown-item" value="videos">Video</a></li>
+              <li><a class="dropdown-item">Buch</a></li>
+              <li><a class="dropdown-item">Website</a></li>
+              <li><a class="dropdown-item">YouTube</a></li>
+            </ul>
+          </div>
+          <input type="hidden" name="dateityp" id="dateityp" value="">
+  
+
+          <input id="file" type="file" name="filetoupload" placeholder="https://example.com" class="form-control"
+            pattern="https://.*" required>
+          <div id="infotext">
+            <i class="bi bi-info-circle"></i>
+            Es können nur PNGs hochgeladen werden.
+          </div>
+          <input id="btnNC" class="btn btn-primary" type="submit" value="Senden">
+        </form>
+      </div>
+    </div>
+  </div>
+  
+  <script src="../public/script/material.js"></script>
+  
+</body>
+
+</html>

@@ -1,0 +1,42 @@
+/* Willkommensseite bzw. Home */
+
+#wk-con {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  width: 100%;
+}
+
+#wk-msg {
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-size: 20px;
+}
+
+#wk-msg span {
+  color: #0365c7;
+}
+
+#wk-con > * > h3 { /* Unterüberschriften */
+  display: flex;
+  justify-content: center;
+}
+
+#wk-con div {
+  width: 40%;
+}
+
+#wk-con a {
+  text-decoration: none;
+}
+
+#wk-con td {
+  padding: 0;
+}
+
+#wk-con td a {
+  display: block;
+  padding: 8px;
+}

@@ -1,0 +1,227 @@
+<%- include('partials/header'); %>
+
+    <div id="sidebar">
+        <%- include('partials/sidebar'); %>
+    </div>
+
+    <!-- ältere Bootstrap Version für SelectPicker notwendig -->
+    <link rel="stylesheet" href="../public/css/bootstrapv32.min.css">
+    <link rel="stylesheet" href="../public/css/bootstrap-select.css">
+    <script src="../public/script/bootstrap-select.js"></script>
+    <script src="../public/script/bootstrapv32.min.js"></script>
+    <script src="../public/script/moment.min.js"></script>
+    <script src="../public/script/bootstrap-datetimepicker.min.js"></script>
+
+    <link href="../public/css/inhalt.css" rel="stylesheet" type="text/css" />
+
+    <div id="content">
+        <h3 class="ueberschrift">Inhalte</h3>
+        <div id="existingContent">
+            <table class="table">
+                <tbody>
+                    <% if(Eigene.length!=0){ var i=0; Eigene.forEach(function(data_eigene){ %>
+                        <tr>
+                            <td>
+                                <% // Wenn PDF, dann direkt zur richtigen Seite verlinken
+                                if (data_eigene.TypID == "2") {
+                                    // Zeitstempel in Sekunden umwandeln
+                                    videoLink = data_eigene.Link;
+                                    console.log(data_eigene.Zeitstempel);
+                                    if (data_eigene.Zeitstempel != null) {
+                                        hms = data_eigene.Zeitstempel.split(':');
+                                        seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                        videoLink += '#t=' + seconds;
+                                    }
+                                %>
+                                        <a class="editName<%=data_eigene.InhaltID %>" href="<%= videoLink %>" target="_blank" ><%=data_eigene.InhaltName %></a>    
+                                <% // Wenn Video, dann direkt zur richtigen Seite verlinken
+                                } else if (data_eigene.TypID == "1") {
+                                    pdfLink = data_eigene.Link;
+                                    if (data_eigene.pSeite > 0) {
+                                        pdfLink += '#page=' + data_eigene.pSeite;
+                                    }
+                                %>
+                                  <a class="editName<%=data_eigene.InhaltID %>" href="<%=pdfLink%>" target="_blank" ><%=data_eigene.InhaltName %></a>  
+                                <% 
+                                } 
+                                else if (data_eigene.TypID == "6") {
+                                    // Zeitstempel in Sekunden umwandeln
+                                    videoLink = data_eigene.Link;
+                                    videoLink = videoLink.replace("watch?v=", "");
+                                    videoId = videoLink.substring(videoLink.lastIndexOf('/')+1);
+                                    if (data_eigene.Zeitstempel != null) {
+                                        hms = data_eigene.Zeitstempel.split(':');
+                                        seconds = (+hms[0]) * 60 * 60 + (+hms[1]) * 60 + (+hms[2]);
+                                        // videoLink = 'https://www.youtube.com/embed/' + videoId + '?start=' + seconds;
+                                        videoExLink = 'https://www.youtube.com/watch?time_continue=' + seconds + '&v=' + videoId;
+                                    }
+                                %>
+
+                                <a class="editName<%=data_eigene.InhaltID %>" href="<%=videoExLink%>" target="_blank" ><%=data_eigene.InhaltName %></a>  
+   
+                                <% // Bei Bildern und Links (mit Büchern) einfach der Link
+                                } else {
+                                %>
+                                        <a class="editName<%=data_eigene.InhaltID %>" href="<%= data_eigene.Link %>" target="_blank" ><%=data_eigene.InhaltName %></a>    
+                                <%
+                                }
+                                %>
+
+
+                                <form action="/inhalt" method="post">
+                                    <input class="openSelected<%=data_eigene.InhaltID %> closer" type="text" id="inhaltName" name="inhaltName" value="<%=data_eigene.InhaltName %>" style="display: none">
+                            <td>
+                                    <button class="openSelected<%=data_eigene.InhaltID %> closer btn btn-success" onclick="backToStandart()" type="submit" id="inhaltReN" name="inhaltReN" value="<%=data_eigene.InhaltID %>" style="display: none">Bestätigen</button>
+                                </form>
+                                <button class="openSelected<%=data_eigene.InhaltID %> opener btn btn-warning" onclick="openSelected(<%=data_eigene.InhaltID %>)">Umbenennen</button>
+                            </td>
+                            <td>
+                                <form action="/inhalt" method="post">
+                                    <button type="submit" class="btn btn-danger" id="inhaltDel" name="inhaltDel" value="<%=data_eigene.InhaltID %>">Löschen</button>
+                                </form>
+                            </td>
+                        </tr>
+                    <% i++; }) %>
+                    <% } else{ %>
+                        <td colspan="3">
+                            No Data Found
+                        </td>
+                    <% } %>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <div id="newContent">
+            <h3 class="ueberschrift">Inhalt erstellen</h3>
+            <form method="post" class="px-4 pt-5" action="inhaltErstellung">
+                <!--Input field für den Namen-->
+                <input type="text" name="name" class="form-control" placeholder="Dateiname" required> <br>
+                <p>Material:</p><!--dropdown Menü für das Material-->
+                <select id="Materialpicker" class="selectpicker pb-5" data-live-search="true" name="materialname" title="Material" required>
+                    <% if(qry.length!=0){ qry.forEach(function(data){ %>
+                        <option>
+                            <%=data.MaterialName %>
+                        </option>
+                        <% }) %>
+                            <% } %>
+                </select>
+                <p>Themen:</p><!--multi selector für die Themenauswahl-->
+                <select class="selectpicker pb-5" multiple data-live-search="true" name="themaname" title="Thema" required>
+                    <% if(qry2.length!=0){ qry2.forEach(function(data){ %>
+                        <option>
+                            <%=data.ThemaName %>
+                        </option>
+                        <% }) %>
+                            <% } %>
+                                </table>
+                </select>
+                <!--Informationstext-->
+                <input type="text" class="form-control" placeholder="Informationen" name="info" required><br>
+    
+                <!--Wenn es ein buch ist hier die ISBN eintragen-->
+                <input id="input3f" type="text" name="bookisbn" class="form-control" style="display: none;" placeholder="ISBN">
+
+                <!--Wenn es ein buch ist hier Kapitel eintragen-->
+                <input id="input2f" type="text" name="bookcap" class="form-control" style="display: none;" placeholder="Kapitelnummer">
+
+                <!--Seitenzahl für pdf oder buch-->
+                <input id="input1f" type="text" name="pdfbook" class="form-control" style="display: none;" placeholder="Seitenzahl">
+    
+                <!-- Zeitstempel Video -->
+                <div class="input-group date" id="datetimepicker" style="display: none;"><!--Zeitstempel auswahl für ein Video-->
+                    <input name="vidtimestamp" type="text" id="datetimepickeri" class="form-control" placeholder="00:00:00">
+                    <span class="input-group-addon" >
+                        <span class="glyphicon glyphicon-time"></span>
+                    </span>
+                </div>
+    
+    
+                <script>
+                    var mattyp = 0;
+                    $("#Materialpicker").change(//Script, um zu bestimmen, um welche art von Material es sich handelt und demnach die richtigen Inputs anzeigen (nutzt hier die Variable TypID)
+                        function () {
+                            var this_value = $(this).val();
+                            <% qry.forEach(function (data) {%>
+                                if ("<%= data.MaterialName %>" == this_value) {
+                                    mattyp = "<%= data.TypID %>";
+                                }
+                            <%}) %>
+                            // 1 = PDF
+                            if (mattyp == 1) {
+                                $("#datetimepickeri").val("");
+                                $("#input1f").val("");
+                                $("#input2f").val("");
+                                $("#input3f").val("");
+                                $("#input1").text("Seite:");
+                                $("#input1").show();
+                                $("#input1f").show();
+                                $("#datetimepicker").hide();
+                                $("#input2").hide();
+                                $("#input3").hide();
+                                $("#input2f").hide();
+                                $("#input3f").hide();
+                            }
+
+                            // 2 = Video, 6 = YouTube
+                            else if (mattyp == 2 || mattyp == 6) {
+                                $("#input1f").val("");
+                                $("#input2f").val("");
+                                $("#input3f").val("");
+                                $("#datetimepickeri").val("");
+                                $("#input1").text("Zeitstempel:");
+                                $("#input1").show();
+                                $("#input1f").hide();
+                                $("#input2f").hide();
+                                $("#input3f").hide();
+                                $("#input2").hide();
+                                $("#input3").hide();
+                                $("#datetimepicker").show();
+                                $("#datetimepicker").datetimepicker({
+                                    format: "HH:mm:ss",
+                                })
+    
+                            }
+
+                            // 4 = Buch, 5 = Website
+                            else if (mattyp == 4) {
+                                $("#input1").text("Seite:");
+                                $("#input1f").val("");
+                                $("#input2f").val("");
+                                $("#input3f").val("");
+                                $("#datetimepickeri").val("");
+                                $("#datetimepicker").hide();
+                                $("#input1").show();
+                                $("#input2").show();
+                                $("#input3").show();
+                                $("#input1f").show();
+                                $("#input2f").show();
+                                $("#input3f").show();
+                            }
+
+                            // sonst 3 IMG
+                            else {
+                                $("#input1f").val("");
+                                $("#input2f").val("");
+                                $("#input3f").val("");
+                                $("#datetimepickeri").val("");
+                                $("#input1").hide();
+                                $("#input2").hide();
+                                $("#input3").hide();
+                                $("#input1f").hide();
+                                $("#input2f").hide();
+                                $("#input3f").hide();
+                                $("#datetimepicker").hide();
+                            }
+                        }
+                    );
+                </script>
+    
+                <input id="btnNC" class="btn btn-primary" type="submit" value="Senden">
+            </form>
+        </div>
+        
+    </div>
+
+    </body>
+
+    </html>

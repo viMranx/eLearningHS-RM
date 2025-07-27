@@ -1,0 +1,165 @@
+<%- include('partials/header'); %>
+
+
+    <div id="sidebar">
+        <%- include('partials/sidebar'); %>
+    </div>
+    
+<link href="../public/css/leute.css" rel="stylesheet" type="text/css" />
+
+
+    <div id="content">
+        <h3 class="ueberschrift">Leute</h3>
+        <div id="leute">
+            <div id="leuteKarte">
+                <h4>Persönliche Informationen</h4>
+
+                <div class="card">
+                    <div id="layoutKarte">
+                        <div id="platzhalter">
+                            <img class="hidden" id="imgName">
+                        </div>
+
+
+                        <div class="card-body">
+                            <h5 class="card-title" id="cvname"></h5>
+                        </div>
+                    </div>
+
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col">
+                                   <p>Email:</p>
+
+                                </div>
+                                <div class="col">
+                                    <p id="email"></p>
+                                </div>
+                            </div>
+                        </li>
+
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col">
+                                  <p id="tag_lehrjahr" onclick="changeLabel(this.id)">Themen:</p>
+                                </div>
+
+                                <div class="row">
+                                    <p id="thema_lehrjahr" onclick="changeLabel(this.id)">...</p>
+                                </div>
+                            </div>
+
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+
+            <div id="leuteListe">
+                <div>
+                    <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                        <li class="nav-item" role="presentation">
+                            <a href="#tab_azu" class="nav-link active" data-bs-toggle="tab">Azubis</a>
+                        </li>
+                        <li class="nav-item" role="presentation">
+                            <a href="#tab_exp" class="nav-link" data-bs-toggle="tab">Experte</a>
+                        </li>
+                    </ul>
+                    <div class="tableFixHead">
+                        <div class="tab-content">
+                            <!--start tabl azubis-->
+                            <div class="tab-pane fade show active" id="tab_azu">
+                                <div class=".table-responsive-sm">
+                                    <!--begin table layout-->
+                                    <table class="table table-hover">
+                                        <!--<tr> -> table row-->
+                                        <tr>
+                                            <!--<th> -> table header-->
+                                            <th data-field="vname">Vorname</th>
+                                            <th data-field="nname">Nachname</th>
+                                            <% if(userExperte==true){ %>
+                                            <th data-field="nname">Notizen</th>
+                                            <% } %>
+                                        </tr>
+                                        <% if(Nutzer.length!=0){ var i=0; Nutzer.forEach(function(data){ %>
+                                            <% if(data.Experte==0){ %>
+                                                <tr data-href="/leute/" style="cursor: pointer;" class="pers_row"
+                                                    onclick="clickMethode('<%=data.Vorname%>', '<%=data.Nachname%>', '<%=data.Email%>', '<%=data.ThemaName%>')">
+
+                                                    <td>
+                                                        <%=data.Vorname %>
+                                                    </td>
+
+                                                    <td>
+                                                        <%=data.Nachname %>
+                                                    </td>
+                                            <% if(userExperte==true){ %>
+                                                    <td>
+                                                        <form action="/leute" method="post">
+                                                            <input type="hidden" name="id" value="<%=data.NutzerID%>">
+                                                            <textarea rows="4" name="notizen" placeholder="Notizen..."><%=data.Notizen %></textarea>
+                                                            <button type="submit" class="btn btn-primary">Speichern</button>
+                                                        </form>
+                                                    </td>
+                                            <% } %>
+                                                </tr>
+
+                                            <% } %>
+                                        <% i++; }) %>
+                                        <% } else{ %>
+                                            <tr>
+                                                <td colspan="3">No Data Found</td>
+                                            </tr>
+                                        <% } %>
+                                    </table>
+                                </div>
+                            </div>
+                            <!--start table experte -->
+                            <div class="tab-pane fade" id="tab_exp">
+                                <!--start container table-->
+                                <div class=".table-responsive-sm">
+                                    <!--begin table layout-->
+                                    <table class="table table-hover">
+                                        <!--<tr> -> table row-->
+                                        <tr>
+                                            <!--<th> -> table header-->
+                                            <th data-field="vname">Vorname</th>
+                                            <th data-field="nname">Nachname</th>
+                                        </tr>
+                                        <% if(Nutzer.length!=0){ var i=0; Nutzer.forEach(function(data){ %>
+                                            <% if(data.Experte==1){ %>
+                                                <tr data-href="/leute/" style="cursor: pointer;" class="pers_row"
+                                                    onclick="clickMethode('<%=data.Vorname%>', '<%=data.Nachname%>', '<%=data.Email%>', '<%=data.ThemaName%>')">
+
+                                                    <td>
+                                                        <%=data.Vorname %>
+                                                    </td>
+
+                                                    <td>
+                                                        <%=data.Nachname %>
+                                                    </td>
+                                                </tr>
+                                            <% } %>
+                                        <% i++; }) %>
+                                        <% } else{ %>
+                                            <tr>
+                                                <td colspan="3">No Data Found</td>
+                                            </tr>
+                                        <% } %>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="../public/script/leute.js"></script>
+      
+
+
+    </body>
+
+    </html>

@@ -1,0 +1,50 @@
+.MeineRucksack, .EditRucksack {
+  width: 90%;
+  margin: auto;
+}
+
+.rucksackErstellen {
+  margin: 20px;
+}
+
+#rucksackFilter {
+  display: flex;
+  align-items: center;
+  width: 120px;
+  justify-content: center;
+  cursor: pointer;
+}
+#rucksackFilter i {
+    font-size: 20px;
+}
+
+#rucksackFilter a {
+  text-decoration: none;
+}
+
+#rucksackFilter:hover {
+  color: #0365c7;
+}
+
+#rucksackFilter .dropdown-item:hover {
+  background-color: white;
+}
+
+.rucksackPDFGen {
+  display: flex;
+}
+
+#Rucksack_Löschung_Dialog{
+  font-family: 'Roboto';
+  font-size: 16px;
+}
+
+progress {
+  height: 25px;
+  accent-color: #0365c7;
+  vertical-align: middle;
+}
+
+#tab_nutzer td {
+  vertical-align: middle;
+}

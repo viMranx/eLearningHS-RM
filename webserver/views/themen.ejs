@@ -1,0 +1,227 @@
+<%- include('partials/header'); %>
+<%- include('partials/sidebar'); %>
+  
+<link href="../public/css/themen.css" rel="stylesheet" type="text/css" />
+
+
+<div id="content">
+  <input type="hidden" id="userExperte" value="<%=userExperte %>">
+  <% if(Nachricht == "name_leer"){ %>
+    <div class="alert alert-danger" role="alert">
+        Name darf nicht leer sein!
+    </div>
+  <% }else if(Nachricht == "color_error"){ %>
+    <div class="alert alert-danger" role="alert">
+        Maximum an Themenbereiche erreicht.
+    </div>
+  <% }else if(Nachricht == "ueberThemaAdd"){ %>
+      <div class="alert alert-success" role="alert">
+          Neues Überthema hinzugefügt.
+      </div>
+  <% }else if(Nachricht == "themaAdd"){ %>
+    <div class="alert alert-success" role="alert">
+        Neues Unterthema hinzugefügt.
+    </div>
+  <% }else if(Nachricht == "ueberThemaDelete_tvt"){ %>
+      <div class="alert alert-success" role="alert">
+          Überthema inkl. Unterthemen gelöscht.
+      </div>
+  <% }else if(Nachricht == "ueberThemaDelete_solo"){ %>
+      <div class="alert alert-success" role="alert">
+          Überthema gelöscht.
+      </div>
+  <% }else if(Nachricht == "themaReN"){ %>
+      <div class="alert alert-success" role="alert">
+          Thema umbenannt.
+      </div>
+  <% }else if(Nachricht == "themaDel"){ %>
+      <div class="alert alert-success" role="alert">
+          Thema entfernt.
+      </div>
+  <% } %>
+  <h3 class="ueberschrift">Themen</h3>
+  <% if(userExperte==true){ %>
+    <div id="themenBearbeiten">
+      <div>
+        <table class="table">
+          <tbody>
+            <tr>
+              <form action="/themenBearbeiten" method="post">
+                <td colspan="2">
+                  <input type="text" id="ueberThemenName" name="ueberThemenName" placeholder="Themenbereich Name">
+                </td>
+                <td colspan="2">
+                  <button class="btn btn-success" type="submit" id="ueberThemaAdd" name="ueberThemaAdd" value="true">Themenbereich erstellen</button>
+                </td>
+              </form>
+            </tr>
+            <% if(ueberThema.length!=0){ var i=0; ueberThema.forEach(function(data_ueberThema){ %>
+              <tr>
+                <td colspan="2"><%=data_ueberThema.ThemaName %></td>
+                <td>
+
+                  <button class="openSelected<%=data_ueberThema.ThemaID %> opener btn btn-warning" onclick="openSelected(<%=data_ueberThema.ThemaID %>), changeColor('<%=data_ueberThema.Farbe %>')">Thema hinzufügen</button>
+                  <button class="openSelected<%=data_ueberThema.ThemaID %> closer btn btn-danger" onclick="backToStandart()" style="display: none">Abbrechen</button>
+                </td>
+                <td>
+                  <button class="btn btn-danger loeschung" data-bs-toggle="modal" data-bs-target="#UeThema_Löschung_Dialog">
+                    <p class="hidden_id" hidden><%=data_ueberThema.ThemaID %></p>
+                    Löschen
+                  </button>
+
+                  <!-- Dialog für Überthema-Löschung -->
+                  <div class="modal fade" id="UeThema_Löschung_Dialog" tabindex="-1" aria-labelledby="Rucksack_Löschung_DialogLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="Rucksack_Löschung_DialogLabel">Warnung! Folgende Inhalte werden entfernt:</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                              Sämtliche Unterthemen.
+                            </div>
+                            <div class="modal-footer">
+                              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Abbrechen</button>  
+                              <form action="/themenBearbeiten" method="post">
+                                <button type="submit" class="btn btn-danger" id="themaDelUeber" name="themaDelUeber">Löschen</button>
+                                <!-- value="<%#=data_ueberThema.ThemaID %>" -->
+                              </form>
+                            </div>
+                        </div>
+                      </div>
+                  </div>
+                  <!-- Ende Dialog -->
+                </td>
+              </tr>
+              <tr class="openSelected<%=data_ueberThema.ThemaID %> closer" style="display: none">
+                <form action="/themenBearbeiten" method="post">
+                  <td colspan="3">
+                    <input class="themaAddFarbe" type="color" id="themaAddFarbe" name="themaAddFarbe">
+                    <input type="text" id="themaNameAdd" name="themaNameAdd" placeholder="Thema Name">
+                  </td>
+                  <td>
+                    <button class="btn btn-success" onclick="openSelected(<%=data_ueberThema.ThemaID %>)" type="submit" id="themaAdd" name="themaAdd" value="<%=data_ueberThema.ThemaID %>">Bestätigen</button>
+                  </td>
+                </form>
+              </tr>
+              <% if(Thema.length!=0){ var j=0; Thema.forEach(function(data_thema){ %>
+                <% if(data_ueberThema.ThemaID == data_thema.TeilVon){ %>
+                  <tr>
+                    <td width="10px"></td>
+                    <td>
+                      <div class="openSelected<%=data_thema.ThemaID %> opener"><%=data_thema.ThemaName %></div>
+                      <form action="/themenBearbeiten" method="post">
+                        <input class="openSelected<%=data_thema.ThemaID %> closer" type="text" id="themaName" name="themaName" value="<%=data_thema.ThemaName %>" style="display: none" required>
+                    </td>
+                    <td>
+                        <button class="openSelected<%=data_thema.ThemaID %> closer btn btn-success" onclick="openSelected(<%=data_thema.ThemaID %>)" type="submit" id="themaReN" name="themaReN" value="<%=data_thema.ThemaID %>" style="display: none">Bestätigen</button>
+                      </form>
+                      <button class="openSelected<%=data_thema.ThemaID %> opener btn btn-warning" onclick="openSelected(<%=data_thema.ThemaID %>)">Umbenennen</button>
+                    </td>
+                    <td>
+                      <form action="/themenBearbeiten" method="post">
+                        <button type="submit" class="btn btn-danger" id="themaDel" name="themaDel" value="<%=data_thema.ThemaID %>">Löschen</button>
+                      </form>
+                    </td>
+                  </tr>
+                <% } %>
+              <% j++; }) %>
+              <% } else{ %>
+                <td colspan="3">
+                  No Data Found
+                </td>
+              <% } %>
+            <% i++; }) %>
+            <% } else{ %>
+              <td colspan="3">
+                No Data Found
+              </td>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  <% } %>
+  <div id="themenKuchen">
+    <script src='../public/script/d3.v4.min.js'></script>
+    <script>
+      var parents = [];
+      var i = 0;
+      var exists = false;
+  
+      //Überprüft ob es Eltern gibt und welche ids das sind
+      <% Thema.forEach(function (data){%>
+        if("<%=data.TeilVon%>"!= ""){
+  
+          parents.forEach(function (currentValue){
+            if(currentValue == "<%=data.TeilVon%>") 
+              exists = true;
+          });
+  
+          if(!exists){
+            parents[i] = "<%=data.TeilVon%>";
+            i++;
+          }
+          exists = false;
+        }
+      <%})%>
+  
+      //root des JSON
+      var data = '{\n"name": "Themen",\n"color": "#FFFFFF",\n"haschildren": true,\n"children": [\n';
+          //Eins nach dem anderen die Themen hinzufügen
+          <% Thema.forEach(function (data) {%>
+            if("<%=data.TeilVon%>"== ""){
+              //hat das aktuelle Thema Unterthemen
+              parents.forEach(function (currentValue){
+              if(currentValue == "<%=data.ThemaID%>") 
+                exists = true;
+              });
+              //wenn nein Eintrag ohne neu Kinder
+              if(!exists){
+                data = data + 
+                '{\n'+
+                '"name": "<%=data.ThemaName%>",\n'+
+                '"size":' + -"<%=data.ThemaName%>".length +',\n' +
+                '"haschildren": false,\n' +
+                '"color": "<%=data.Farbe%>"\n'+
+                '},\n';
+              }
+              //Wenn ja Eintrag mit neuen Kindern
+              if(exists){
+                data = data +
+                '{\n'+
+                '"name": "<%=data.ThemaName%>",\n'+
+                '"haschildren": true,\n' +
+                '"color": "<%=data.Farbe%>",\n'+
+                '"children": [\n';
+                
+                //inner Schleife, um die Kinder des Themas hinzuzufügen
+                <% Thema.forEach(function (data1){%>
+                  if(<%=data.ThemaID%> =="<%=data1.TeilVon%>"){
+                    data = data + 
+                    '{'+
+                    '"name": "<%=data1.ThemaName%>",\n'+
+                    '"size":' + -"<%=data1.ThemaName%>".length +',\n' +
+                    '"haschildren": false,\n' +
+                    '"color": "<%=data1.Farbe%>"\n'+
+                    '},\n';
+                  }
+                <%});%>
+                data = data.substring(0, data.length-2);
+                data = data + ']\n},\n'
+              }
+              exists = false;
+            }
+          <%}) %>;
+          data = data.substring(0, data.length-2);
+          data = data + ']}';
+          data = JSON.parse(data);
+          console.log(data);
+    </script>
+    <script src="../public/script/themen.js"></script>
+  </div>
+</div>
+
+</body>
+
+</html>

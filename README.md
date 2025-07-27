@@ -20,6 +20,3 @@ graph TB
   Ausgabe -- findet Antwort --> Antwort[Weiter lernen]
 end
 ```
-
-## Milestones
-![Milestones](/Planung/Jira/milestones.jpg "Milestones")
